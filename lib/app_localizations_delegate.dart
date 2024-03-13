@@ -11,9 +11,12 @@ class AppLocalizations {
   }
 
   String translate(String key) {
-    if (_localizedStrings[key] == null) {
-      return '::$key';
+    if (_localizedStrings.containsKey(key) == false) {
+      debugPrint('AppLocalizations: missing key: $key');
+      // wrong text key
+      return '[$key]';
     }
+    // localize text
     return _localizedStrings[key];
   }
 }
@@ -25,14 +28,28 @@ class AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {
 
   @override
   bool isSupported(Locale locale) {
-    return ['en', 'vi'].contains(locale.languageCode);
+    final supported = ['en', 'vi'].contains(locale.languageCode);
+    debugPrint(
+        'AppLocalizations ${locale.languageCode} isSupported: $supported');
+    return supported;
   }
 
   @override
   Future<AppLocalizations> load(Locale locale) async {
-    String string = await rootBundle
-        .loadString('assets/strings/${locale.languageCode}.json');
-    _localizedStrings = json.decode(string);
+    debugPrint('AppLocalizations load: ${locale.languageCode}');
+
+    try {
+      String string = await rootBundle
+          .loadString('assets/strings/${locale.languageCode}.json');
+      _localizedStrings = json.decode(string);
+    } catch (e) {
+      debugPrint('AppLocalizations error: $e');
+      debugPrint('AppLocalizations load EN as default language');
+      String defaultString =
+          await rootBundle.loadString('assets/strings/en.json');
+      _localizedStrings = json.decode(defaultString);
+    }
+
     return SynchronousFuture<AppLocalizations>(AppLocalizations());
   }
 
