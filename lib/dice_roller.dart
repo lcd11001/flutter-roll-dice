@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:simple_roll_dice/app_localizations_delegate.dart';
 import 'package:simple_roll_dice/dice_image.dart';
 import 'package:flutter/material.dart';
 
@@ -32,6 +33,8 @@ class _DiceRollerState extends State<DiceRoller> {
 
   @override
   Widget build(BuildContext context) {
+    final _ = AppLocalizations.of(context);
+
     return Center(
       child: Column(children: [
         DiceImage(
@@ -48,7 +51,7 @@ class _DiceRollerState extends State<DiceRoller> {
               fontWeight: FontWeight.bold,
             ),
           ),
-          child: const Text('Roll Dice'),
+          child: Text(_.translate('txt_btn_roll')),
         )
       ]),
     );
