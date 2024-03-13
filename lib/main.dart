@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'package:first_app/gradient_container.dart';
+import 'package:simple_roll_dice/gradient_container.dart';
 
 void main() {
   runApp(

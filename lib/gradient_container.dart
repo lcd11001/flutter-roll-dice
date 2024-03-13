@@ -4,9 +4,9 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 
-import 'package:first_app/dice_image.dart';
-import 'package:first_app/dice_roller.dart';
-import 'package:first_app/styled_text.dart';
+import 'package:simple_roll_dice/dice_image.dart';
+import 'package:simple_roll_dice/dice_roller.dart';
+import 'package:simple_roll_dice/styled_text.dart';
 
 class GradientContainer extends StatelessWidget {
   final List<Color> colors;

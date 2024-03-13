@@ -1,6 +1,6 @@
 import 'dart:math';
 
-import 'package:first_app/dice_image.dart';
+import 'package:simple_roll_dice/dice_image.dart';
 import 'package:flutter/material.dart';
 
 final randomizer = Random();
