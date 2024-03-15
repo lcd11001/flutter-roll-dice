@@ -1,4 +1,4 @@
-package com.lcdsoft.flutter.rolldice.simple_roll_dice
+package com.lcdsoft.flutter.rolldice
 
 import io.flutter.embedding.android.FlutterActivity
 
