@@ -4,14 +4,15 @@ import 'package:simple_roll_dice/app_version.dart';
 
 import 'package:simple_roll_dice/gradient_container.dart';
 
-import 'package:simple_roll_dice/app_localizations_delegate.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 void main() {
   runApp(
     MaterialApp(
-      locale: const Locale('en'),
-      localizationsDelegates: const [AppLocalizationsDelegate()],
-      supportedLocales: const [Locale('en'), Locale('vi')],
+      // auto detect the device locale
+      //locale: const Locale('vi', 'VN'),
+      localizationsDelegates: AppLocalizations.localizationsDelegates,
+      supportedLocales: AppLocalizations.supportedLocales,
       theme: ThemeData(
         bottomSheetTheme: const BottomSheetThemeData(
           backgroundColor: Colors.transparent,

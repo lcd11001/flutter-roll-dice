@@ -1,6 +1,6 @@
 import 'dart:math';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-import 'package:simple_roll_dice/app_localizations_delegate.dart';
 import 'package:simple_roll_dice/dice_image.dart';
 import 'package:flutter/material.dart';
 
@@ -33,7 +33,7 @@ class _DiceRollerState extends State<DiceRoller> {
 
   @override
   Widget build(BuildContext context) {
-    final _ = AppLocalizations.of(context);
+    final loc = AppLocalizations.of(context)!;
 
     return Center(
       child: Column(children: [
@@ -51,7 +51,7 @@ class _DiceRollerState extends State<DiceRoller> {
               fontWeight: FontWeight.bold,
             ),
           ),
-          child: Text(_.translate('txt_btn_roll')),
+          child: Text(loc.txt_btn_roll),
         )
       ]),
     );

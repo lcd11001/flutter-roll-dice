@@ -3,8 +3,8 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-import 'package:simple_roll_dice/app_localizations_delegate.dart';
 import 'package:simple_roll_dice/dice_image.dart';
 import 'package:simple_roll_dice/dice_roller.dart';
 import 'package:simple_roll_dice/styled_text.dart';
@@ -19,7 +19,7 @@ class GradientContainer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final _ = AppLocalizations.of(context);
+    final loc = AppLocalizations.of(context)!;
 
     return Container(
       decoration: BoxDecoration(
@@ -33,7 +33,7 @@ class GradientContainer extends StatelessWidget {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            StyledText(_.translate('txt_app_title')),
+            StyledText(loc.txt_app_title),
             const DiceRoller(),
           ],
         ),
