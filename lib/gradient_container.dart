@@ -7,6 +7,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import 'package:simple_roll_dice/dice_image.dart';
 import 'package:simple_roll_dice/dice_roller.dart';
+import 'package:simple_roll_dice/dice_roller_3d.dart';
 import 'package:simple_roll_dice/styled_text.dart';
 
 class GradientContainer extends StatelessWidget {
@@ -34,7 +35,8 @@ class GradientContainer extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           children: [
             StyledText(loc.txt_app_title),
-            const DiceRoller(),
+            // const DiceRoller(),
+            const DiceRoller3D(),
           ],
         ),
       ),
