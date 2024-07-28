@@ -16,6 +16,7 @@ class _DiceRoller3DState extends State<DiceRoller3D>
   Object? dice;
   final randomizer = Random();
   late AnimationController controller;
+  late Animation<double> animation;
   late bool isLoading;
 
   @override
@@ -26,6 +27,20 @@ class _DiceRoller3DState extends State<DiceRoller3D>
       duration: const Duration(milliseconds: 2000),
       vsync: this,
     )..addListener(_onValueChanged);
+
+    // animation = Tween<double>(begin: 0, end: 360).animate(controller);
+    animation = TweenSequence<double>([
+      TweenSequenceItem<double>(
+        tween: Tween<double>(begin: 0, end: 360)
+            .chain(CurveTween(curve: Curves.easeIn)),
+        weight: 1,
+      ),
+      TweenSequenceItem<double>(
+        tween: Tween<double>(begin: 360, end: 0)
+            .chain(CurveTween(curve: Curves.easeOut)),
+        weight: 1,
+      ),
+    ]).animate(controller);
   }
 
   @override
@@ -36,25 +51,15 @@ class _DiceRoller3DState extends State<DiceRoller3D>
   }
 
   void _onValueChanged() {
-    debugPrint('value: ${controller.value}');
-    // if (dice != null) {
-    //   dice!.rotation.x = controller.value;
-    //   dice!.rotation.y = controller.value;
-    //   dice!.rotation.z = controller.value;
-    // }
-  }
+    if (dice != null) {
+      double angle = animation.value;
+      //debugPrint('value: ${controller.value} angle: $angle');
 
-  void _applyDiceImages() {
-    // dice.children[0].texture = 'assets/dice-images/dice-1.png';
-    // dice.children[1].texture = 'assets/dice-images/dice-2.png';
-    // dice.children[2].texture = 'assets/dice-images/dice-3.png';
-    // dice.children[3].texture = 'assets/dice-images/dice-4.png';
-    // dice.children[4].texture = 'assets/dice-images/dice-5.png';
-    // dice.children[5].texture = 'assets/dice-images/dice-6.png';
-    debugPrint('dice.children.length: ${dice!.children.length}');
-    debugPrint('dice.mesh.length: ${dice!.mesh}');
+      dice!.rotation.y = angle;
 
-    // Load and apply the texture
+      dice!.updateTransform();
+      scene.update();
+    }
   }
 
   void _onSceneCreated(Scene scene) {
@@ -69,19 +74,11 @@ class _DiceRoller3DState extends State<DiceRoller3D>
       backfaceCulling: false,
     );
 
-    _applyDiceImages();
-
     scene.world.add(dice!);
-
-    setState(() {
-      isLoading = false;
-    });
   }
 
   void rollDice() {
-    setState(() {
-      controller.value = 0;
-    });
+    controller.reset();
     controller.forward();
   }
 
@@ -97,6 +94,8 @@ class _DiceRoller3DState extends State<DiceRoller3D>
           height: 300,
           child: Cube(
             onSceneCreated: _onSceneCreated,
+            onObjectCreated: _onObjectCreated,
+            interactive: true,
           ),
         ),
         TextButton(
@@ -110,9 +109,17 @@ class _DiceRoller3DState extends State<DiceRoller3D>
               fontWeight: FontWeight.bold,
             ),
           ),
-          child: Text(loc.txt_btn_roll),
+          child: Text(isLoading ? "loading" : loc.txt_btn_roll),
         ),
       ],
     );
+  }
+
+  void _onObjectCreated(Object object) {
+    if (object.children.isNotEmpty) {
+      setState(() {
+        isLoading = false;
+      });
+    }
   }
 }
