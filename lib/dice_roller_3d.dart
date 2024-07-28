@@ -90,78 +90,6 @@ class _DiceRoller3DState extends State<DiceRoller3D>
     6: [0, 0, 0],
   };
 
-  Map<int, List<double>> calculateFaceRotations(int facingCamera) {
-    // Helper function to normalize angles to the range [0, 360)
-    double normalizeAngle(double angle) {
-      while (angle < 0) angle += 360;
-      return angle % 360;
-    }
-
-    // Helper function to create a rotation
-    List<double> createRotation(double x, double y, double z) {
-      return [normalizeAngle(x), normalizeAngle(y), normalizeAngle(z)];
-    }
-
-    switch (facingCamera) {
-      case 1:
-        return {
-          1: createRotation(0, 0, 0),
-          2: createRotation(90, 0, 0),
-          3: createRotation(0, 90, 0),
-          4: createRotation(0, -90, 0),
-          5: createRotation(-90, 0, 0),
-          6: createRotation(180, 0, 0),
-        };
-      case 2:
-        return {
-          1: createRotation(-90, 0, 0),
-          2: createRotation(0, 0, 0),
-          3: createRotation(0, 90, 0),
-          4: createRotation(0, -90, 0),
-          5: createRotation(180, 0, 0),
-          6: createRotation(90, 0, 0),
-        };
-      case 3:
-        return {
-          1: createRotation(0, -90, 0),
-          2: createRotation(90, 0, -90),
-          3: createRotation(0, 0, 0),
-          4: createRotation(0, 180, 0),
-          5: createRotation(-90, 0, -90),
-          6: createRotation(180, 0, -90),
-        };
-      case 4:
-        return {
-          1: createRotation(0, 90, 0),
-          2: createRotation(90, 0, 90),
-          3: createRotation(0, 180, 0),
-          4: createRotation(0, 0, 0),
-          5: createRotation(-90, 0, 90),
-          6: createRotation(180, 0, 90),
-        };
-      case 5:
-        return {
-          1: createRotation(90, 0, 0),
-          2: createRotation(180, 0, 0),
-          3: createRotation(90, 90, 0),
-          4: createRotation(90, -90, 0),
-          5: createRotation(0, 0, 0),
-          6: createRotation(-90, 0, 0),
-        };
-      case 6:
-        return {
-          1: createRotation(180, 0, 0),
-          2: createRotation(-90, 0, 0),
-          3: createRotation(180, 90, 0),
-          4: createRotation(180, -90, 0),
-          5: createRotation(90, 0, 0),
-          6: createRotation(0, 0, 0),
-        };
-      default:
-        throw ArgumentError('Invalid face number. Must be between 1 and 6.');
-    }
-  }
-
   @override
   void initState() {
     super.initState();
@@ -215,8 +143,7 @@ class _DiceRoller3DState extends State<DiceRoller3D>
 
     scene.camera.position.z = 3;
 
-    //List<double> rotations = _getRotations(1, face);
-    List<double> rotations = calculateFaceRotations(face)[face]!;
+    List<double> rotations = _getRotations(1, face);
 
     dice = Object(
       position: Vector3(0, 0, 0),
@@ -269,8 +196,7 @@ class _DiceRoller3DState extends State<DiceRoller3D>
       angleY = dice!.rotation.y;
       angleZ = dice!.rotation.z;
 
-      //List<double> rotations = _getRotations(face, newFace);
-      List<double> rotations = calculateFaceRotations(face)[newFace]!;
+      List<double> rotations = _getRotations(face, newFace);
       targetAngleX = rotations[0];
       targetAngleY = rotations[1];
       targetAngleZ = rotations[2];
