@@ -38,7 +38,8 @@ class GradientContainer extends StatelessWidget {
             // const DiceRoller(),
             const DiceRoller3D(
               fileName: 'assets/dice-3d/cube.obj',
-              milliseconds: 500,
+              milliseconds: 1000,
+              numberOfRolls: 5,
             ),
           ],
         ),
