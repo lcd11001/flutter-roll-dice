@@ -3,6 +3,7 @@ import 'package:flutter_cube/flutter_cube.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import 'package:simple_roll_dice/dice_3d.dart';
+import 'package:simple_roll_dice/dice_roller.dart';
 
 class DiceRoller3D extends StatefulWidget {
   final String fileName;
@@ -21,6 +22,7 @@ class DiceRoller3D extends StatefulWidget {
 class _DiceRoller3DState extends State<DiceRoller3D>
     with SingleTickerProviderStateMixin {
   late AnimationController _controller;
+  late CurvedAnimation _curvedAnimation;
   late Animation<Vector3> _animation;
   late Vector3Tween _rotationTween;
 
@@ -54,11 +56,21 @@ class _DiceRoller3DState extends State<DiceRoller3D>
       end: Vector3.zero(),
     );
 
-    _animation = _rotationTween.animate(_controller)
+    _curvedAnimation = CurvedAnimation(
+      parent: _controller,
+      curve: Curves.easeInOut,
+    );
+
+    _animation = _rotationTween.animate(_curvedAnimation)
       ..addListener(_onAnimationUpdate)
       ..addStatusListener(_onAnimationStatusChange);
 
+    _face = 1 + randomizer.nextInt(6);
+    _prevFace = _face;
     _currentRotation = Vector3.array(faceRotations[_face]!);
+    _rotation = Vector3.copy(_currentRotation);
+
+    debugPrint('Initial face: $_face');
   }
 
   @override
@@ -130,7 +142,10 @@ class _DiceRoller3DState extends State<DiceRoller3D>
 
     _isRolling = true;
     _prevFace = _face;
-    _face = _face == 6 ? 1 : _face + 1;
+    //_face = _face == 6 ? 1 : _face + 1;
+    while (_face == _prevFace) {
+      _face = 1 + randomizer.nextInt(6);
+    }
 
     debugPrint('Rolling dice from $_prevFace to $_face');
     Vector3 targetRotation = Vector3.array(faceRotations[_face]!);
