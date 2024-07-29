@@ -68,6 +68,7 @@ class _Dice3DState extends State<Dice3D> {
   Widget build(BuildContext context) {
     return Cube(
       onSceneCreated: _onSceneCreated,
+      interactive: false,
     );
   }
 }

@@ -20,9 +20,26 @@ class DiceRoller3D extends StatefulWidget {
 
 class _DiceRoller3DState extends State<DiceRoller3D>
     with SingleTickerProviderStateMixin {
-  bool _isLoading = true;
   late AnimationController _controller;
-  late Animation<double> _animation;
+  late Animation<Vector3> _animation;
+  late Vector3Tween _rotationTween;
+
+  // ONE is facing camera
+  final Map<int, List<double>> faceRotations = {
+    1: [0, 0, 0],
+    2: [-90, 0, 0],
+    3: [0, 90, 0],
+    4: [0, -90, 0],
+    5: [90, 0, 0],
+    6: [180, 0, 0],
+  };
+  int _face = 1;
+  int _prevFace = 1;
+  Vector3 _currentRotation = Vector3.zero();
+  Vector3 _rotation = Vector3.zero();
+
+  bool _isLoading = true;
+  bool _isRolling = false;
 
   @override
   void initState() {
@@ -32,9 +49,22 @@ class _DiceRoller3DState extends State<DiceRoller3D>
       vsync: this,
     );
 
-    _animation = Tween<double>(begin: 0, end: 1).animate(_controller)
+    _rotationTween = Vector3Tween(
+      begin: Vector3.zero(),
+      end: Vector3.zero(),
+    );
+
+    _animation = _rotationTween.animate(_controller)
       ..addListener(_onAnimationUpdate)
       ..addStatusListener(_onAnimationStatusChange);
+
+    _currentRotation = Vector3.array(faceRotations[_face]!);
+  }
+
+  @override
+  dispose() {
+    _controller.dispose();
+    super.dispose();
   }
 
   @override
@@ -49,6 +79,7 @@ class _DiceRoller3DState extends State<DiceRoller3D>
           height: 300,
           child: Dice3D(
             fileName: widget.fileName,
+            rotation: _rotation,
             scale: Vector3.all(2),
             isAsset: true,
             onCreated: _onDiceCreated,
@@ -72,11 +103,18 @@ class _DiceRoller3DState extends State<DiceRoller3D>
   }
 
   void _onAnimationUpdate() {
-    debugPrint('Animation value: ${_animation.value}');
+    // debugPrint('Animation value: ${_animation.value}');
+    setState(() {
+      _rotation = _animation.value;
+    });
   }
 
   void _onAnimationStatusChange(AnimationStatus status) {
-    debugPrint('Animation status: $status');
+    // debugPrint('Animation status: $status');
+    if (status == AnimationStatus.completed) {
+      _currentRotation = _rotation;
+      _isRolling = false;
+    }
   }
 
   void _onDiceCreated(Object dice) {
@@ -86,10 +124,52 @@ class _DiceRoller3DState extends State<DiceRoller3D>
   }
 
   void _rollDice() {
-    if (_isLoading) {
+    if (_isLoading || _isRolling) {
       return;
     }
 
+    _isRolling = true;
+    _prevFace = _face;
+    _face = _face == 6 ? 1 : _face + 1;
+
+    debugPrint('Rolling dice from $_prevFace to $_face');
+    Vector3 targetRotation = Vector3.array(faceRotations[_face]!);
+    Vector3 rotationDelta = targetRotation - _currentRotation;
+    rotationDelta = Vector3(
+      _nomalizeAngle(rotationDelta.x),
+      _nomalizeAngle(rotationDelta.y),
+      _nomalizeAngle(rotationDelta.z),
+    );
+
+    _rotationTween.begin = _currentRotation;
+    _rotationTween.end = _currentRotation + rotationDelta;
+
     _controller.forward(from: 0);
+  }
+
+  double _nomalizeAngle(double angle) {
+    // normalize angle to -180 to 180
+    while (angle < -180) {
+      angle += 360;
+    }
+    while (angle > 180) {
+      angle -= 360;
+    }
+
+    return angle;
+  }
+}
+
+class Vector3Tween extends Tween<Vector3> {
+  Vector3Tween({required Vector3 begin, required Vector3 end})
+      : super(begin: begin, end: end);
+
+  @override
+  Vector3 lerp(double t) {
+    return Vector3(
+      begin!.x + (end!.x - begin!.x) * t,
+      begin!.y + (end!.y - begin!.y) * t,
+      begin!.z + (end!.z - begin!.z) * t,
+    );
   }
 }
