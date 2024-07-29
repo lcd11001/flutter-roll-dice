@@ -36,7 +36,9 @@ class GradientContainer extends StatelessWidget {
           children: [
             StyledText(loc.txt_app_title),
             // const DiceRoller(),
-            const DiceRoller3D(),
+            const DiceRoller3D(
+              fileName: 'assets/dice-3d/cube.obj',
+            ),
           ],
         ),
       ),
