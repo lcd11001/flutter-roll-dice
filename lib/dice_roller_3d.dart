@@ -23,13 +23,13 @@ class DiceRoller3D extends StatefulWidget {
 
 class _DiceRoller3DState extends State<DiceRoller3D>
     with SingleTickerProviderStateMixin {
-  late AnimationController _controller;
-  late CurvedAnimation _curvedAnimation;
-  late Animation<Vector3> _animation;
-  late Vector3Tween _rotationTween;
+  late final AnimationController _controller;
+  late final CurvedAnimation _curvedAnimation;
+  late final Animation<Vector3> _animation;
+  late final Vector3Tween _rotationTween;
 
   // ONE is facing camera
-  final Map<int, List<double>> faceRotations = {
+  static const Map<int, List<double>> faceRotations = {
     1: [0, 0, 0],
     2: [-90, 0, 0],
     3: [0, 90, 0],
@@ -179,11 +179,7 @@ class _DiceRoller3DState extends State<DiceRoller3D>
 
     Vector3 targetRotation = Vector3.array(faceRotations[_currentFace]!);
     Vector3 rotationDelta = targetRotation - _currentRotation;
-    rotationDelta = Vector3(
-      _nomalizeAngle(rotationDelta.x),
-      _nomalizeAngle(rotationDelta.y),
-      _nomalizeAngle(rotationDelta.z),
-    );
+    rotationDelta = _nomalizeRotation(rotationDelta);
 
     _rotationTween.begin = _currentRotation;
     _rotationTween.end = _currentRotation + rotationDelta;
@@ -201,6 +197,14 @@ class _DiceRoller3DState extends State<DiceRoller3D>
     }
 
     return angle;
+  }
+
+  Vector3 _nomalizeRotation(Vector3 vector) {
+    return Vector3(
+      _nomalizeAngle(vector.x),
+      _nomalizeAngle(vector.y),
+      _nomalizeAngle(vector.z),
+    );
   }
 }
 
