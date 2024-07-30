@@ -78,7 +78,7 @@ class _DiceRoller3DState extends State<DiceRoller3D>
   }
 
   @override
-  dispose() {
+  void dispose() {
     _controller.dispose();
     super.dispose();
   }
