@@ -1,24 +1,43 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_cube/flutter_cube.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import 'package:simple_roll_dice/dice_3d.dart';
 import 'package:simple_roll_dice/dice_roller.dart';
+
+typedef DiceRoller3DCallback = void Function(DiceRoller3D roller);
 
 class DiceRoller3D extends StatefulWidget {
   final String fileName;
   final int milliseconds;
   final int numberOfRolls;
+  final int initFace;
+  final VoidCallback? onPressed;
+  final DiceRoller3DCallback? onCreated;
+  final Color? bgColor;
+  final double width = 150.0;
+  final double height = 150.0;
 
-  const DiceRoller3D({
+  late final _DiceRoller3DState _state;
+
+  DiceRoller3D({
     super.key,
     required this.fileName,
     this.milliseconds = 2000,
     this.numberOfRolls = 3,
-  });
+    this.initFace = 1,
+    this.onPressed,
+    this.onCreated,
+    this.bgColor = Colors.transparent,
+  }) {
+    _state = _DiceRoller3DState();
+  }
+
+  void rollDice() {
+    _state._rollDice();
+  }
 
   @override
-  State<DiceRoller3D> createState() => _DiceRoller3DState();
+  State<DiceRoller3D> createState() => _state;
 }
 
 class _DiceRoller3DState extends State<DiceRoller3D>
@@ -69,7 +88,8 @@ class _DiceRoller3DState extends State<DiceRoller3D>
       ..addListener(_onAnimationUpdate)
       ..addStatusListener(_onAnimationStatusChange);
 
-    _targetFace = 1 + randomizer.nextInt(6);
+    //_targetFace = 1 + randomizer.nextInt(6);
+    _targetFace = widget.initFace;
     _prevFace = _currentFace = _targetFace;
     _currentRotation = Vector3.array(faceRotations[_targetFace]!);
     _rotation = Vector3.copy(_currentRotation);
@@ -85,34 +105,26 @@ class _DiceRoller3DState extends State<DiceRoller3D>
 
   @override
   Widget build(BuildContext context) {
-    final loc = AppLocalizations.of(context)!;
-
     return Column(
       mainAxisSize: MainAxisSize.max,
       children: [
-        SizedBox(
-          width: 300,
-          height: 300,
-          child: Dice3D(
-            fileName: widget.fileName,
-            rotation: _rotation,
-            scale: Vector3.all(2),
-            isAsset: true,
-            onCreated: _onDiceCreated,
-          ),
-        ),
-        TextButton(
-          onPressed: _rollDice,
-          style: TextButton.styleFrom(
-            foregroundColor: Colors.red,
-            backgroundColor: Colors.black,
-            padding: const EdgeInsets.fromLTRB(32, 16, 32, 16),
-            textStyle: const TextStyle(
-              fontSize: 30,
-              fontWeight: FontWeight.bold,
+        GestureDetector(
+          onTap: () {
+            widget.onPressed?.call();
+            _rollDice();
+          },
+          child: Container(
+            color: widget.bgColor,
+            width: widget.width,
+            height: widget.height,
+            child: Dice3D(
+              fileName: widget.fileName,
+              rotation: _rotation,
+              scale: Vector3.all(3),
+              isAsset: true,
+              onCreated: _onDiceCreated,
             ),
           ),
-          child: Text(_isLoading ? "loading" : loc.txt_btn_roll),
         ),
       ],
     );
@@ -142,6 +154,7 @@ class _DiceRoller3DState extends State<DiceRoller3D>
   void _onDiceCreated(Object dice) {
     setState(() {
       _isLoading = false;
+      widget.onCreated?.call(widget);
     });
   }
 
