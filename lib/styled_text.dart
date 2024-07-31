@@ -1,18 +1,45 @@
 import 'package:flutter/material.dart';
 
-class StyledText extends StatelessWidget {
+import 'package:google_fonts/google_fonts.dart';
+
+class StyledText extends StatefulWidget {
   final String text;
 
   const StyledText(this.text, {super.key});
 
   @override
+  State<StyledText> createState() => _StyledTextState();
+}
+
+class _StyledTextState extends State<StyledText> {
+  late Future googleFontsPending;
+
+  @override
+  void initState() {
+    super.initState();
+    googleFontsPending = GoogleFonts.pendingFonts([
+      GoogleFonts.pacifico(),
+    ]);
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return Text(
-      text,
-      style: const TextStyle(
-        fontSize: 40,
-        color: Colors.white,
-      ),
+    return FutureBuilder(
+      future: googleFontsPending,
+      builder: (ctx, snapshot) {
+        if (snapshot.connectionState != ConnectionState.done) {
+          return const SizedBox();
+        }
+
+        return Text(
+          widget.text,
+          style: GoogleFonts.getFont("Pacifico").copyWith(
+            fontSize: 40,
+            fontWeight: FontWeight.bold,
+            color: Colors.white,
+          ),
+        );
+      },
     );
   }
 }

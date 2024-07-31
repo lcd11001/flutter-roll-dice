@@ -5,6 +5,7 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 import 'package:simple_roll_dice/dice_image.dart';
 import 'package:simple_roll_dice/dice_roller.dart';
@@ -27,7 +28,7 @@ class GradientContainer extends StatefulWidget {
 const int _numberOfRolls = 5;
 const int _milliseconds = 300;
 const int _resultDuration = 2000;
-const int _dropDuration = 500;
+const int _dropDuration = 1000;
 const double _dropHeight = -500;
 final randomizer = Random();
 
@@ -41,10 +42,15 @@ class _GradientContainerState extends State<GradientContainer>
   double _diceVerticalPosition = -100.0;
   late AnimationController _diceAnimationController;
   late Animation<double> _diceAnimation;
+  late Future googleFontsPending;
 
   @override
   void initState() {
     super.initState();
+
+    googleFontsPending = GoogleFonts.pendingFonts([
+      GoogleFonts.yesevaOne(),
+    ]);
 
     _diceAnimationController = AnimationController(
       duration: const Duration(milliseconds: _dropDuration),
@@ -143,19 +149,29 @@ class _GradientContainerState extends State<GradientContainer>
                       ],
                     ),
                   ),
-                  TextButton(
-                    //onPressed: _rollDice,
-                    onPressed: _onRollDice,
-                    style: TextButton.styleFrom(
-                      foregroundColor: Colors.red,
-                      backgroundColor: Colors.black,
-                      padding: const EdgeInsets.fromLTRB(32, 16, 32, 16),
-                      textStyle: const TextStyle(
-                        fontSize: 30,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    child: Text(_isLoading > 0 ? "..." : loc.txt_btn_roll),
+                  FutureBuilder(
+                    future: googleFontsPending,
+                    builder: (ctx, snapshot) {
+                      if (snapshot.connectionState != ConnectionState.done) {
+                        return const SizedBox();
+                      }
+
+                      return TextButton(
+                        //onPressed: _rollDice,
+                        onPressed: _onRollDice,
+                        style: TextButton.styleFrom(
+                          foregroundColor: Colors.red,
+                          backgroundColor: Colors.black,
+                          padding: const EdgeInsets.fromLTRB(32, 16, 32, 16),
+                          minimumSize: const Size(200, 40),
+                          textStyle: GoogleFonts.getFont("Yeseva One").copyWith(
+                            fontSize: 30,
+                            fontWeight: FontWeight.normal,
+                          ),
+                        ),
+                        child: Text(_isLoading > 0 ? "..." : loc.txt_btn_roll),
+                      );
+                    },
                   ),
                   const SizedBox(height: 32),
                 ],

@@ -2,6 +2,7 @@ import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class ResultText extends StatefulWidget {
   final int number;
@@ -23,6 +24,8 @@ class _ResultTextState extends State<ResultText>
   late final CurvedAnimation _curvedAnimation;
   late final Animation<double> _animation;
 
+  late Future googleFontsPending;
+
   final AudioPlayer _audioPlayer = AudioPlayer();
   final soundUrl =
       'https://www.sorobanexam.org/tools/tts?number={number}&lang={language}';
@@ -30,6 +33,10 @@ class _ResultTextState extends State<ResultText>
   @override
   void initState() {
     super.initState();
+
+    googleFontsPending = GoogleFonts.pendingFonts([
+      GoogleFonts.blackOpsOne(),
+    ]);
 
     _controller = AnimationController(
       duration: Duration(milliseconds: widget.duration),
@@ -76,15 +83,24 @@ class _ResultTextState extends State<ResultText>
 
   @override
   Widget build(BuildContext context) {
-    return AnimatedBuilder(
-      animation: _animation,
-      builder: (ctx, child) {
-        return Text(
-          widget.number.toString(),
-          style: TextStyle(
-            fontSize: _animation.value * 200,
-            color: Colors.white,
-          ),
+    return FutureBuilder(
+      future: googleFontsPending,
+      builder: (ctx, snapshot) {
+        if (snapshot.connectionState != ConnectionState.done) {
+          return const SizedBox();
+        }
+
+        return AnimatedBuilder(
+          animation: _animation,
+          builder: (ctx, child) {
+            return Text(
+              widget.number.toString(),
+              style: GoogleFonts.getFont("Black Ops One").copyWith(
+                fontSize: _animation.value * 200,
+                color: Colors.white,
+              ),
+            );
+          },
         );
       },
     );
