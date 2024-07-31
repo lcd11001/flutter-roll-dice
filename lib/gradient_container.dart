@@ -27,6 +27,7 @@ class GradientContainer extends StatefulWidget {
 const int _numberOfRolls = 5;
 const int _milliseconds = 300;
 const int _resultDuration = 2000;
+final randomizer = Random();
 
 class _GradientContainerState extends State<GradientContainer> {
   List<DiceRoller3D> _diceRollers = [];
@@ -44,6 +45,7 @@ class _GradientContainerState extends State<GradientContainer> {
         fileName: 'assets/dice-3d/cube.obj',
         milliseconds: _milliseconds,
         numberOfRolls: _numberOfRolls,
+        initFace: randomizer.nextInt(6) + 1,
         onCreated: _onDiceCreated,
         onRollCompleted: _onDiceRollCompleted,
       ),
@@ -51,6 +53,7 @@ class _GradientContainerState extends State<GradientContainer> {
         fileName: 'assets/dice-3d/cube.obj',
         milliseconds: _milliseconds,
         numberOfRolls: _numberOfRolls,
+        initFace: randomizer.nextInt(6) + 1,
         onCreated: _onDiceCreated,
         onRollCompleted: _onDiceRollCompleted,
       ),
@@ -58,6 +61,7 @@ class _GradientContainerState extends State<GradientContainer> {
         fileName: 'assets/dice-3d/cube.obj',
         milliseconds: _milliseconds,
         numberOfRolls: _numberOfRolls,
+        initFace: randomizer.nextInt(6) + 1,
         onCreated: _onDiceCreated,
         onRollCompleted: _onDiceRollCompleted,
       ),
@@ -130,7 +134,7 @@ class _GradientContainerState extends State<GradientContainer> {
               Container(
                 color: Colors.black.withOpacity(0.5),
                 child: Center(
-                  child: ResultText(text: '$_diceNumber'),
+                  child: ResultText(number: _diceNumber),
                 ),
               ),
           ],
