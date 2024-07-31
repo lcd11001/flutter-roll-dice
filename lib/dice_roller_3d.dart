@@ -14,8 +14,9 @@ class DiceRoller3D extends StatefulWidget {
   final VoidCallback? onPressed;
   final DiceRoller3DCallback? onCreated;
   final Color? bgColor;
-  final double width = 150.0;
-  final double height = 150.0;
+  final double width;
+  final double height;
+  final bool interactive;
 
   late final _DiceRoller3DState _state;
 
@@ -28,6 +29,9 @@ class DiceRoller3D extends StatefulWidget {
     this.onPressed,
     this.onCreated,
     this.bgColor = Colors.transparent,
+    this.width = 150.0,
+    this.height = 150.0,
+    this.interactive = false,
   }) {
     _state = _DiceRoller3DState();
   }
@@ -37,6 +41,7 @@ class DiceRoller3D extends StatefulWidget {
   }
 
   @override
+  // ignore: no_logic_in_create_state
   State<DiceRoller3D> createState() => _state;
 }
 
@@ -110,8 +115,10 @@ class _DiceRoller3DState extends State<DiceRoller3D>
       children: [
         GestureDetector(
           onTap: () {
-            widget.onPressed?.call();
-            _rollDice();
+            if (widget.interactive) {
+              widget.onPressed?.call();
+              _rollDice();
+            }
           },
           child: Container(
             color: widget.bgColor,

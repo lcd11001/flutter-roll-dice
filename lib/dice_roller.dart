@@ -38,7 +38,7 @@ class _DiceRollerState extends State<DiceRoller> {
     return Center(
       child: Column(children: [
         DiceImage(
-          imagePath: 'assets/dice-images/dice-${diceNumber + 1}.png',
+          imagePath: 'assets/dice-3d/dice-${diceNumber + 1}.png',
         ),
         TextButton(
           onPressed: rollDice,

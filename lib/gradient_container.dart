@@ -66,50 +66,57 @@ class _GradientContainerState extends State<GradientContainer> {
           end: Alignment.bottomCenter,
         ),
       ),
-      child: Center(
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            StyledText(loc.txt_app_title),
-            Wrap(
-              alignment: WrapAlignment.center,
-              spacing: 8.0, // Horizontal spacing between children
-              runSpacing: 8.0, // Vertical spacing between runs
-              children: [
-                for (final diceRoller in _diceRollers)
-                  Padding(
-                    padding: const EdgeInsets.all(0),
-                    child: ConstrainedBox(
-                      constraints: BoxConstraints(
-                        maxWidth: maxDiceWidth,
+      child: SafeArea(
+        child: Center(
+          child: Column(
+            mainAxisSize: MainAxisSize.max,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              const SizedBox(height: 16),
+              StyledText(loc.txt_app_title),
+              Expanded(
+                child: Wrap(
+                  alignment: WrapAlignment.center,
+                  runAlignment: WrapAlignment.center,
+                  spacing: 8.0, // Horizontal spacing between children
+                  runSpacing: 8.0, // Vertical spacing between runs
+                  children: [
+                    for (final diceRoller in _diceRollers)
+                      Padding(
+                        padding: const EdgeInsets.all(0),
+                        child: ConstrainedBox(
+                          constraints: BoxConstraints(
+                            maxWidth: maxDiceWidth,
+                          ),
+                          child: diceRoller,
+                        ),
                       ),
-                      child: diceRoller,
-                    ),
-                  ),
-              ],
-            ),
-            const SizedBox(height: 16),
-            TextButton(
-              //onPressed: _rollDice,
-              onPressed: () {
-                // how I can call DiceRoller3D._rollDice when TextButton have pressed?
-                debugPrint('TextButton onPressed');
-                for (final diceRoller in _diceRollers) {
-                  diceRoller.rollDice();
-                }
-              },
-              style: TextButton.styleFrom(
-                foregroundColor: Colors.red,
-                backgroundColor: Colors.black,
-                padding: const EdgeInsets.fromLTRB(32, 16, 32, 16),
-                textStyle: const TextStyle(
-                  fontSize: 30,
-                  fontWeight: FontWeight.bold,
+                  ],
                 ),
               ),
-              child: Text(_isLoading > 0 ? "loading" : loc.txt_btn_roll),
-            ),
-          ],
+              TextButton(
+                //onPressed: _rollDice,
+                onPressed: () {
+                  // how I can call DiceRoller3D._rollDice when TextButton have pressed?
+                  debugPrint('TextButton onPressed');
+                  for (final diceRoller in _diceRollers) {
+                    diceRoller.rollDice();
+                  }
+                },
+                style: TextButton.styleFrom(
+                  foregroundColor: Colors.red,
+                  backgroundColor: Colors.black,
+                  padding: const EdgeInsets.fromLTRB(32, 16, 32, 16),
+                  textStyle: const TextStyle(
+                    fontSize: 30,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                child: Text(_isLoading > 0 ? "loading" : loc.txt_btn_roll),
+              ),
+              const SizedBox(height: 32),
+            ],
+          ),
         ),
       ),
     );
