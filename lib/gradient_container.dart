@@ -112,7 +112,7 @@ class _GradientContainerState extends State<GradientContainer> {
                     fontWeight: FontWeight.bold,
                   ),
                 ),
-                child: Text(_isLoading > 0 ? "loading" : loc.txt_btn_roll),
+                child: Text(_isLoading > 0 ? "..." : loc.txt_btn_roll),
               ),
               const SizedBox(height: 32),
             ],
