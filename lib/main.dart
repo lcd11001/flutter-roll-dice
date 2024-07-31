@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:package_info_plus/package_info_plus.dart';
-import 'package:simple_roll_dice/app_version.dart';
 
+import 'package:simple_roll_dice/app_version.dart';
 import 'package:simple_roll_dice/gradient_container.dart';
 
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
