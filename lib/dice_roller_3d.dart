@@ -5,6 +5,7 @@ import 'package:simple_roll_dice/dice_3d.dart';
 import 'package:simple_roll_dice/dice_roller.dart';
 
 typedef DiceRoller3DCallback = void Function(DiceRoller3D roller);
+typedef DiceRoller3DCompletedCallback = void Function(int face);
 
 class DiceRoller3D extends StatefulWidget {
   final String fileName;
@@ -13,6 +14,7 @@ class DiceRoller3D extends StatefulWidget {
   final int initFace;
   final VoidCallback? onPressed;
   final DiceRoller3DCallback? onCreated;
+  final DiceRoller3DCompletedCallback? onRollCompleted;
   final Color? bgColor;
   final double width;
   final double height;
@@ -28,6 +30,7 @@ class DiceRoller3D extends StatefulWidget {
     this.initFace = 1,
     this.onPressed,
     this.onCreated,
+    this.onRollCompleted,
     this.bgColor = Colors.transparent,
     this.width = 150.0,
     this.height = 150.0,
@@ -39,6 +42,8 @@ class DiceRoller3D extends StatefulWidget {
   void rollDice() {
     _state._rollDice();
   }
+
+  int get currentFace => _state._currentFace;
 
   @override
   // ignore: no_logic_in_create_state
@@ -154,6 +159,7 @@ class _DiceRoller3DState extends State<DiceRoller3D>
         _performSingleRoll();
       } else {
         _isRolling = false;
+        widget.onRollCompleted?.call(_currentFace);
       }
     }
   }

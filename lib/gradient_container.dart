@@ -25,6 +25,8 @@ class GradientContainer extends StatefulWidget {
 class _GradientContainerState extends State<GradientContainer> {
   List<DiceRoller3D> _diceRollers = [];
   int _isLoading = 3;
+  int _isRolling = 3;
+  int _diceNumber = 0;
 
   @override
   void initState() {
@@ -36,18 +38,21 @@ class _GradientContainerState extends State<GradientContainer> {
         milliseconds: 1000,
         numberOfRolls: 5,
         onCreated: _onDiceCreated,
+        onRollCompleted: _onDiceRollCompleted,
       ),
       DiceRoller3D(
         fileName: 'assets/dice-3d/cube.obj',
         milliseconds: 1000,
         numberOfRolls: 5,
         onCreated: _onDiceCreated,
+        onRollCompleted: _onDiceRollCompleted,
       ),
       DiceRoller3D(
         fileName: 'assets/dice-3d/cube.obj',
         milliseconds: 1000,
         numberOfRolls: 5,
         onCreated: _onDiceCreated,
+        onRollCompleted: _onDiceRollCompleted,
       ),
     ];
   }
@@ -99,6 +104,8 @@ class _GradientContainerState extends State<GradientContainer> {
                 onPressed: () {
                   // how I can call DiceRoller3D._rollDice when TextButton have pressed?
                   debugPrint('TextButton onPressed');
+                  _diceNumber = 0;
+                  _isRolling = 3;
                   for (final diceRoller in _diceRollers) {
                     diceRoller.rollDice();
                   }
@@ -126,5 +133,16 @@ class _GradientContainerState extends State<GradientContainer> {
     setState(() {
       _isLoading--;
     });
+  }
+
+  void _onDiceRollCompleted(int face) {
+    setState(() {
+      _isRolling--;
+      _diceNumber += face;
+    });
+
+    if (_isRolling == 0) {
+      debugPrint('Dice number: $_diceNumber');
+    }
   }
 }
