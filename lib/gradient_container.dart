@@ -27,18 +27,38 @@ class GradientContainer extends StatefulWidget {
 const int _numberOfRolls = 5;
 const int _milliseconds = 300;
 const int _resultDuration = 2000;
+const int _dropDuration = 500;
+const double _dropHeight = -500;
 final randomizer = Random();
 
-class _GradientContainerState extends State<GradientContainer> {
+class _GradientContainerState extends State<GradientContainer>
+    with SingleTickerProviderStateMixin {
   List<DiceRoller3D> _diceRollers = [];
   int _isLoading = 3;
   int _isRolling = 3;
   int _diceNumber = 0;
   bool _showResult = false;
+  double _diceVerticalPosition = -100.0;
+  late AnimationController _diceAnimationController;
+  late Animation<double> _diceAnimation;
 
   @override
   void initState() {
     super.initState();
+
+    _diceAnimationController = AnimationController(
+      duration: const Duration(milliseconds: _dropDuration),
+      vsync: this,
+    );
+
+    _diceAnimation = Tween<double>(begin: _dropHeight, end: 0.0).animate(
+      CurvedAnimation(
+        parent: _diceAnimationController,
+        curve: Curves.bounceOut,
+      ),
+    )..addListener(() {
+        _diceVerticalPosition = _diceAnimation.value;
+      });
 
     _diceRollers = [
       DiceRoller3D(
@@ -66,6 +86,12 @@ class _GradientContainerState extends State<GradientContainer> {
         onRollCompleted: _onDiceRollCompleted,
       ),
     ];
+  }
+
+  @override
+  void dispose() {
+    _diceAnimationController.dispose();
+    super.dispose();
   }
 
   @override
@@ -100,14 +126,19 @@ class _GradientContainerState extends State<GradientContainer> {
                       runSpacing: 8.0, // Vertical spacing between runs
                       children: [
                         for (final diceRoller in _diceRollers)
-                          Padding(
-                            padding: const EdgeInsets.all(0),
-                            child: ConstrainedBox(
-                              constraints: BoxConstraints(
-                                maxWidth: maxDiceWidth,
-                              ),
-                              child: diceRoller,
-                            ),
+                          AnimatedBuilder(
+                            animation: _diceAnimationController,
+                            builder: (context, child) {
+                              return Transform.translate(
+                                offset: Offset(0, _diceVerticalPosition),
+                                child: ConstrainedBox(
+                                  constraints: BoxConstraints(
+                                    maxWidth: maxDiceWidth,
+                                  ),
+                                  child: diceRoller,
+                                ),
+                              );
+                            },
                           ),
                       ],
                     ),
@@ -148,6 +179,9 @@ class _GradientContainerState extends State<GradientContainer> {
       _diceNumber = 0;
       _isRolling = 3;
       _showResult = false;
+
+      _diceAnimationController.forward(from: 0.0);
+
       for (final diceRoller in _diceRollers) {
         diceRoller.rollDice();
       }
@@ -157,6 +191,7 @@ class _GradientContainerState extends State<GradientContainer> {
   void _onDiceCreated(DiceRoller3D roller) {
     setState(() {
       _isLoading--;
+      _diceAnimationController.forward(from: 0.0);
     });
   }
 
