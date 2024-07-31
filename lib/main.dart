@@ -14,30 +14,34 @@ void main() {
 
   GoogleFonts.config.allowRuntimeFetching = false;
 
-  LicenseRegistry.addLicense(() async* {
-    final licensePacifico =
-        await rootBundle.loadString('google_fonts/Pacifico/OFL.txt');
-    debugPrint("Pacifico: $licensePacifico");
-    yield LicenseEntryWithLineBreaks(
-        ['google_fonts/Pacifico'], licensePacifico);
+  try {
+    LicenseRegistry.addLicense(() async* {
+      final licensePacifico =
+          await rootBundle.loadString('google_fonts/Pacifico/OFL.txt');
+      debugPrint("Pacifico: $licensePacifico");
+      yield LicenseEntryWithLineBreaks(
+          ['google_fonts/Pacifico'], licensePacifico);
 
-    final licenseBlackOpsOne =
-        await rootBundle.loadString('google_fonts/Black_Ops_One/OFL.txt');
-    debugPrint("BlackOpsOne: $licenseBlackOpsOne");
-    yield LicenseEntryWithLineBreaks(
-        ['google_fonts/Black_Ops_One'], licenseBlackOpsOne);
+      final licenseBlackOpsOne =
+          await rootBundle.loadString('google_fonts/Black_Ops_One/OFL.txt');
+      debugPrint("BlackOpsOne: $licenseBlackOpsOne");
+      yield LicenseEntryWithLineBreaks(
+          ['google_fonts/Black_Ops_One'], licenseBlackOpsOne);
 
-    final licenseYesevaOne =
-        await rootBundle.loadString('google_fonts/Yeseva_One/OFL.txt');
-    debugPrint("YesevaOne: $licenseYesevaOne");
-    yield LicenseEntryWithLineBreaks(
-        ['google_fonts/Yeseva_One'], licenseYesevaOne);
-  });
+      final licenseYesevaOne =
+          await rootBundle.loadString('google_fonts/Yeseva_One/OFL.txt');
+      debugPrint("YesevaOne: $licenseYesevaOne");
+      yield LicenseEntryWithLineBreaks(
+          ['google_fonts/Yeseva_One'], licenseYesevaOne);
+    });
+  } catch (e) {
+    debugPrint("Error: $e");
+  }
 
   runApp(
     MaterialApp(
       // auto detect the device locale
-      locale: const Locale('vi', 'VN'),
+      // locale: const Locale('vi', 'VN'),
       localizationsDelegates: AppLocalizations.localizationsDelegates,
       supportedLocales: AppLocalizations.supportedLocales,
       theme: ThemeData(
