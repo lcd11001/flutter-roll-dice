@@ -221,9 +221,7 @@ class _GradientContainerState extends State<GradientContainer>
       return;
     }
 
-    _playSound(_numDice > 1
-        ? 'sounds/dice_rolling.mp3'
-        : 'sounds/dice_single_rolling.mp3');
+    _playSound(_numDice);
 
     setState(() {
       _dicePoints = 0;
@@ -334,15 +332,22 @@ class _GradientContainerState extends State<GradientContainer>
     return true;
   }
 
-  Future<void> _playSound(String url) async {
+  Future<void> _playSound(int num) async {
     try {
-      debugPrint('Playing sound: $url');
-      if (_numDice == 1) {
+      if (num == 1) {
         // await _audioDiceSingleRolling.start(volume: 1.0);
         _audioDiceSingleRolling.resume();
       } else {
         // await _audioDiceRolling.start(volume: 1.0);
         _audioDiceRolling.resume();
+
+        Timer.periodic(
+          Duration(milliseconds: 100 + randomizer.nextInt(200)),
+          (timer) {
+            _audioDiceSingleRolling.resume();
+            timer.cancel();
+          },
+        );
       }
     } catch (e) {
       debugPrint('Error playing sound: $e');
