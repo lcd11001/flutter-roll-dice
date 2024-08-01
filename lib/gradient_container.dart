@@ -39,7 +39,7 @@ class _GradientContainerState extends State<GradientContainer>
   List<DiceRoller3D> _diceRollers = [];
   int _isLoading = 3;
   int _isRolling = 0;
-  int _diceNumber = 0;
+  int _dicePoints = 0;
   bool _showResult = false;
   double _diceVerticalPosition = -100.0;
   late AnimationController _diceAnimationController;
@@ -159,7 +159,6 @@ class _GradientContainerState extends State<GradientContainer>
                       }
 
                       return TextButton(
-                        //onPressed: _rollDice,
                         onPressed: _onRollDice,
                         style: TextButton.styleFrom(
                           foregroundColor: Colors.red,
@@ -184,7 +183,7 @@ class _GradientContainerState extends State<GradientContainer>
                 color: Colors.black.withOpacity(0.5),
                 child: Center(
                   child: ResultText(
-                    number: _diceNumber,
+                    number: _dicePoints,
                     onCompleted: _onShowResultCompleted,
                   ),
                 ),
@@ -212,7 +211,7 @@ class _GradientContainerState extends State<GradientContainer>
     }
 
     setState(() {
-      _diceNumber = 0;
+      _dicePoints = 0;
       _isRolling = 3;
       _showResult = false;
     });
@@ -237,7 +236,7 @@ class _GradientContainerState extends State<GradientContainer>
   void _onDiceRollCompleted(int face) {
     setState(() {
       _isRolling--;
-      _diceNumber += face;
+      _dicePoints += face;
       _showResult = _isRolling == 0;
     });
   }
