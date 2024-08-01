@@ -30,6 +30,7 @@ const int _numberOfRolls = 5;
 const int _milliseconds = 300;
 
 const double _dropHeight = -500;
+const double _dropGround = -200;
 
 const int _maxNumDice = 3;
 const int _minNumDice = 1;
@@ -115,18 +116,18 @@ class _GradientContainerState extends State<GradientContainer>
     // Adjust the width as needed
     final maxDiceWidth = MediaQuery.of(context).size.width / 2 - 16;
 
-    return Container(
-      decoration: BoxDecoration(
-        gradient: LinearGradient(
-          colors: widget.colors,
-          begin: Alignment.topCenter,
-          end: Alignment.bottomCenter,
-        ),
-      ),
-      child: SafeArea(
-        child: Stack(
-          children: [
-            Center(
+    return Stack(
+      children: [
+        Container(
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              colors: widget.colors,
+              begin: Alignment.topCenter,
+              end: Alignment.bottomCenter,
+            ),
+          ),
+          child: SafeArea(
+            child: Center(
               child: Column(
                 mainAxisSize: MainAxisSize.max,
                 crossAxisAlignment: CrossAxisAlignment.center,
@@ -170,19 +171,19 @@ class _GradientContainerState extends State<GradientContainer>
                 ],
               ),
             ),
-            if (_showResult)
-              Container(
-                color: Colors.black.withOpacity(0.5),
-                child: Center(
-                  child: ResultText(
-                    number: _dicePoints,
-                    onCompleted: _onShowResultCompleted,
-                  ),
-                ),
-              ),
-          ],
+          ),
         ),
-      ),
+        if (_showResult)
+          Container(
+            color: Colors.black.withOpacity(0.5),
+            child: Center(
+              child: ResultText(
+                number: _dicePoints,
+                onCompleted: _onShowResultCompleted,
+              ),
+            ),
+          ),
+      ],
     );
   }
 
@@ -340,7 +341,7 @@ class _GradientContainerState extends State<GradientContainer>
         Timer.periodic(
           const Duration(milliseconds: 50),
           (timer) {
-            if (_diceVerticalPosition > -150) {
+            if (_diceVerticalPosition > _dropGround) {
               debugPrint(
                   'Play single rolling sound  at $_diceVerticalPosition');
               _audioDiceSingleRolling.resume();
@@ -355,7 +356,7 @@ class _GradientContainerState extends State<GradientContainer>
         Timer.periodic(
           const Duration(milliseconds: 50),
           (timer) {
-            if (_diceVerticalPosition > -150) {
+            if (_diceVerticalPosition > _dropGround) {
               debugPrint('Play rolling sound  at $_diceVerticalPosition');
               _audioDiceRolling.resume();
               timer.cancel();
@@ -364,9 +365,9 @@ class _GradientContainerState extends State<GradientContainer>
         );
 
         Timer.periodic(
-          const Duration(milliseconds: 150),
+          const Duration(milliseconds: 120),
           (timer) {
-            if (_diceVerticalPosition > -150) {
+            if (_diceVerticalPosition > _dropGround) {
               debugPrint('Play single rolling sound at $_diceVerticalPosition');
               _audioDiceSingleRolling.resume();
               timer.cancel();
