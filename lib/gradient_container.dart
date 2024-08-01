@@ -167,7 +167,7 @@ class _GradientContainerState extends State<GradientContainer>
                       );
                     },
                   ),
-                  const SizedBox(height: 32),
+                  const SizedBox(height: 50),
                 ],
               ),
             ),
