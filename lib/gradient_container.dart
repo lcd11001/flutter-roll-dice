@@ -55,7 +55,7 @@ class _GradientContainerState extends State<GradientContainer>
   void initState() {
     super.initState();
 
-    _numDice = _minNumDice;
+    _numDice = _maxNumDice;
     _isLoading = _numDice;
 
     googleFontsPending = GoogleFonts.pendingFonts([
