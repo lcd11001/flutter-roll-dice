@@ -39,6 +39,7 @@ final randomizer = Random();
 
 class _GradientContainerState extends State<GradientContainer>
     with SingleTickerProviderStateMixin {
+  int _numDice = _maxNumDice;
   int _isLoading = _maxNumDice;
   int _isRolling = 0;
   int _dicePoints = 0;
@@ -135,25 +136,10 @@ class _GradientContainerState extends State<GradientContainer>
                       runAlignment: WrapAlignment.center,
                       spacing: 8.0, // Horizontal spacing between children
                       runSpacing: 8.0, // Vertical spacing between runs
-                      children: [
-                        for (final diceRoller in _diceRollers)
-                          AnimatedBuilder(
-                            animation: _diceAnimationController,
-                            builder: (context, child) {
-                              return Transform.translate(
-                                offset: Offset(0, _diceVerticalPosition),
-                                child: ConstrainedBox(
-                                  constraints: BoxConstraints(
-                                    maxWidth: maxDiceWidth,
-                                  ),
-                                  child: diceRoller,
-                                ),
-                              );
-                            },
-                          ),
-                      ],
+                      children: buildDices(maxDiceWidth),
                     ),
                   ),
+                  buildOptions(),
                   FutureBuilder(
                     future: googleFontsPending,
                     builder: (ctx, snapshot) {
@@ -195,6 +181,26 @@ class _GradientContainerState extends State<GradientContainer>
         ),
       ),
     );
+  }
+
+  List<Widget> buildDices(double maxDiceWidth) {
+    return [
+      for (final diceRoller in _diceRollers)
+        AnimatedBuilder(
+          animation: _diceAnimationController,
+          builder: (context, child) {
+            return Transform.translate(
+              offset: Offset(0, _diceVerticalPosition),
+              child: ConstrainedBox(
+                constraints: BoxConstraints(
+                  maxWidth: maxDiceWidth,
+                ),
+                child: diceRoller,
+              ),
+            );
+          },
+        ),
+    ];
   }
 
   void _onRollDice() {
@@ -250,5 +256,61 @@ class _GradientContainerState extends State<GradientContainer>
         _showResult = false;
       });
     }
+  }
+
+  buildOptions() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        IconButton(
+          icon: Icon(
+            Icons.remove,
+            color: _numDice == _minNumDice ? Colors.grey : Colors.white,
+            size: 24,
+          ),
+          onPressed: () {
+            if (_numDice > _minNumDice && _isLoading == 0) {
+              setState(() {
+                // _diceRollers.removeLast();
+                // _isLoading++;
+                _numDice--;
+              });
+            }
+          },
+        ),
+        Text(
+          '$_numDice',
+          style: GoogleFonts.getFont("Yeseva One").copyWith(
+            fontSize: 24,
+            fontWeight: FontWeight.bold,
+            color: Colors.white,
+          ),
+        ),
+        IconButton(
+          icon: Icon(
+            Icons.add,
+            color: _numDice == _maxNumDice ? Colors.grey : Colors.white,
+            size: 24,
+          ),
+          onPressed: () {
+            if (_numDice < _maxNumDice && _isLoading == 0) {
+              setState(() {
+                // _diceRollers.add(
+                //   DiceRoller3D(
+                //     fileName: 'assets/dice-3d/cube.obj',
+                //     milliseconds: _milliseconds,
+                //     numberOfRolls: _numberOfRolls,
+                //     initFace: randomizer.nextInt(6) + 1,
+                //     onCreated: _onDiceCreated,
+                //     onRollCompleted: _onDiceRollCompleted,
+                //   ),
+                // );
+                _numDice++;
+              });
+            }
+          },
+        ),
+      ],
+    );
   }
 }
