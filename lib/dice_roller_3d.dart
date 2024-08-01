@@ -4,7 +4,7 @@ import 'package:flutter_cube/flutter_cube.dart';
 import 'package:simple_roll_dice/dice_3d.dart';
 import 'package:simple_roll_dice/dice_roller.dart';
 
-typedef DiceRoller3DCallback = void Function(DiceRoller3D roller);
+typedef DiceRoller3DCreatedCallback = void Function(DiceRoller3DState roller);
 typedef DiceRoller3DCompletedCallback = void Function(int face);
 
 class DiceRoller3D extends StatefulWidget {
@@ -13,16 +13,14 @@ class DiceRoller3D extends StatefulWidget {
   final int numberOfRolls;
   final int initFace;
   final VoidCallback? onPressed;
-  final DiceRoller3DCallback? onCreated;
+  final DiceRoller3DCreatedCallback? onCreated;
   final DiceRoller3DCompletedCallback? onRollCompleted;
   final Color? bgColor;
   final double width;
   final double height;
   final bool interactive;
 
-  late final _DiceRoller3DState _state;
-
-  DiceRoller3D({
+  const DiceRoller3D({
     super.key,
     required this.fileName,
     this.milliseconds = 2000,
@@ -35,22 +33,14 @@ class DiceRoller3D extends StatefulWidget {
     this.width = 150.0,
     this.height = 150.0,
     this.interactive = false,
-  }) {
-    _state = _DiceRoller3DState();
-  }
-
-  void rollDice() {
-    _state._rollDice();
-  }
-
-  int get currentFace => _state._currentFace;
+  });
 
   @override
   // ignore: no_logic_in_create_state
-  State<DiceRoller3D> createState() => _state;
+  State<DiceRoller3D> createState() => DiceRoller3DState();
 }
 
-class _DiceRoller3DState extends State<DiceRoller3D>
+class DiceRoller3DState extends State<DiceRoller3D>
     with SingleTickerProviderStateMixin {
   late final AnimationController _controller;
   late final CurvedAnimation _curvedAnimation;
@@ -122,7 +112,7 @@ class _DiceRoller3DState extends State<DiceRoller3D>
           onTap: () {
             if (widget.interactive) {
               widget.onPressed?.call();
-              _rollDice();
+              rollDice();
             }
           },
           child: Container(
@@ -167,11 +157,11 @@ class _DiceRoller3DState extends State<DiceRoller3D>
   void _onDiceCreated(Object dice) {
     setState(() {
       _isLoading = false;
-      widget.onCreated?.call(widget);
+      widget.onCreated?.call(this);
     });
   }
 
-  void _rollDice() {
+  void rollDice() {
     if (_isLoading || _isRolling) {
       return;
     }

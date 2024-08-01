@@ -39,13 +39,14 @@ final randomizer = Random();
 
 class _GradientContainerState extends State<GradientContainer>
     with SingleTickerProviderStateMixin {
-  int _numDice = _maxNumDice;
-  int _isLoading = _maxNumDice;
+  late int _numDice;
+  late int _isLoading;
   int _isRolling = 0;
   int _dicePoints = 0;
   bool _showResult = false;
   double _diceVerticalPosition = -100.0;
-  late final List<DiceRoller3D> _diceRollers;
+  final List<DiceRoller3DState> _diceRollers = List.empty(growable: true);
+
   late final AnimationController _diceAnimationController;
   late final Animation<double> _diceAnimation;
   late final Future googleFontsPending;
@@ -53,6 +54,9 @@ class _GradientContainerState extends State<GradientContainer>
   @override
   void initState() {
     super.initState();
+
+    _numDice = _minNumDice;
+    _isLoading = _numDice;
 
     googleFontsPending = GoogleFonts.pendingFonts([
       GoogleFonts.yesevaOne(),
@@ -71,33 +75,6 @@ class _GradientContainerState extends State<GradientContainer>
     )..addListener(() {
         _diceVerticalPosition = _diceAnimation.value;
       });
-
-    _diceRollers = [
-      DiceRoller3D(
-        fileName: 'assets/dice-3d/cube.obj',
-        milliseconds: _milliseconds,
-        numberOfRolls: _numberOfRolls,
-        initFace: randomizer.nextInt(6) + 1,
-        onCreated: _onDiceCreated,
-        onRollCompleted: _onDiceRollCompleted,
-      ),
-      DiceRoller3D(
-        fileName: 'assets/dice-3d/cube.obj',
-        milliseconds: _milliseconds,
-        numberOfRolls: _numberOfRolls,
-        initFace: randomizer.nextInt(6) + 1,
-        onCreated: _onDiceCreated,
-        onRollCompleted: _onDiceRollCompleted,
-      ),
-      DiceRoller3D(
-        fileName: 'assets/dice-3d/cube.obj',
-        milliseconds: _milliseconds,
-        numberOfRolls: _numberOfRolls,
-        initFace: randomizer.nextInt(6) + 1,
-        onCreated: _onDiceCreated,
-        onRollCompleted: _onDiceRollCompleted,
-      ),
-    ];
   }
 
   @override
@@ -184,44 +161,44 @@ class _GradientContainerState extends State<GradientContainer>
   }
 
   List<Widget> buildDices(double maxDiceWidth) {
-    return [
-      for (final diceRoller in _diceRollers)
-        AnimatedBuilder(
-          animation: _diceAnimationController,
-          builder: (context, child) {
-            return Transform.translate(
-              offset: Offset(0, _diceVerticalPosition),
-              child: ConstrainedBox(
-                constraints: BoxConstraints(
-                  maxWidth: maxDiceWidth,
-                ),
-                child: diceRoller,
-              ),
-            );
-          },
-        ),
-    ];
+    return List.generate(_numDice, (index) {
+      return buildDice(maxDiceWidth);
+    });
+  }
+
+  Widget buildDice(double maxDiceWidth) {
+    return AnimatedBuilder(
+      animation: _diceAnimationController,
+      builder: (context, child) {
+        return Transform.translate(
+          offset: Offset(0, _diceVerticalPosition),
+          child: ConstrainedBox(
+            constraints: BoxConstraints(
+              maxWidth: maxDiceWidth,
+            ),
+            child: DiceRoller3D(
+              fileName: 'assets/dice-3d/cube.obj',
+              milliseconds: _milliseconds,
+              numberOfRolls: _numberOfRolls,
+              initFace: randomizer.nextInt(6) + 1,
+              onCreated: _onDiceCreated,
+              onRollCompleted: _onDiceRollCompleted,
+            ),
+          ),
+        );
+      },
+    );
   }
 
   void _onRollDice() {
-    if (_isLoading > 0) {
-      debugPrint('Still loading');
-      return;
-    }
-
-    if (_isRolling > 0) {
-      debugPrint('Still rolling');
-      return;
-    }
-
-    if (_showResult) {
-      debugPrint('Still showing result');
+    if (!isReady()) {
+      debugPrint('Not ready');
       return;
     }
 
     setState(() {
       _dicePoints = 0;
-      _isRolling = 3;
+      _isRolling = _numDice;
       _showResult = false;
     });
 
@@ -232,8 +209,9 @@ class _GradientContainerState extends State<GradientContainer>
     }
   }
 
-  void _onDiceCreated(DiceRoller3D roller) {
+  void _onDiceCreated(DiceRoller3DState state) {
     setState(() {
+      _diceRollers.add(state);
       _isLoading--;
     });
 
@@ -269,10 +247,9 @@ class _GradientContainerState extends State<GradientContainer>
             size: 24,
           ),
           onPressed: () {
-            if (_numDice > _minNumDice && _isLoading == 0) {
+            if (_numDice > _minNumDice && isReady()) {
               setState(() {
-                // _diceRollers.removeLast();
-                // _isLoading++;
+                _diceRollers.removeLast();
                 _numDice--;
               });
             }
@@ -293,24 +270,34 @@ class _GradientContainerState extends State<GradientContainer>
             size: 24,
           ),
           onPressed: () {
-            if (_numDice < _maxNumDice && _isLoading == 0) {
+            if (_numDice < _maxNumDice && isReady()) {
               setState(() {
-                // _diceRollers.add(
-                //   DiceRoller3D(
-                //     fileName: 'assets/dice-3d/cube.obj',
-                //     milliseconds: _milliseconds,
-                //     numberOfRolls: _numberOfRolls,
-                //     initFace: randomizer.nextInt(6) + 1,
-                //     onCreated: _onDiceCreated,
-                //     onRollCompleted: _onDiceRollCompleted,
-                //   ),
-                // );
                 _numDice++;
+                _isLoading = (_numDice - _diceRollers.length);
               });
             }
           },
         ),
       ],
     );
+  }
+
+  bool isReady() {
+    if (_isLoading > 0) {
+      debugPrint('Still loading');
+      return false;
+    }
+
+    if (_isRolling > 0) {
+      debugPrint('Still rolling');
+      return false;
+    }
+
+    if (_showResult) {
+      debugPrint('Still showing result');
+      return false;
+    }
+
+    return true;
   }
 }
