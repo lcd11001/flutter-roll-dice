@@ -1,4 +1,28 @@
 {
     "txt_app_title": "Đỗ Xí Ngầu",
-    "txt_btn_roll": "Lắc"
+    "txt_btn_roll": "Lắc",
+    "txt_btn_close": "Đóng",
+    "txt_settings_title": "Cài Đặt",
+    "txt_settings_audio": "Âm thanh: {value}",
+    "@txt_settings_audio": {
+        "placeholders": {
+            "value": {
+                "type": "String",
+                "example": "Bật",
+                "description": "Bật hoặc Tắt"
+            }
+        }
+    },
+    "txt_settings_number_dices": "Số xí ngầu: {value}",
+    "@txt_settings_number_dices": {
+        "placeholders": {
+            "value": {
+                "type": "int",
+                "example": "1",
+                "description": "Số xí ngầu [1-3]"
+            }
+        }
+    },
+    "txt_settings_on": "Bật",
+    "txt_settings_off": "Tắt"
 }

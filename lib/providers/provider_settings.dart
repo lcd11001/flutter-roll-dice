@@ -1,6 +1,8 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class ProviderSettings {
+  int minDices = 1;
+  int maxDices = 3;
   final int numberDices;
   final bool allowAudio;
   final bool showSettings;
@@ -9,6 +11,8 @@ class ProviderSettings {
     required this.numberDices,
     required this.allowAudio,
     required this.showSettings,
+    this.minDices = 1,
+    this.maxDices = 3,
   });
 
   ProviderSettings copyWith({
@@ -40,6 +44,10 @@ class ProviderSettingsNotifier extends StateNotifier<ProviderSettings> {
 
   void toggleAllowAudio() {
     state = state.copyWith(allowAudio: !state.allowAudio);
+  }
+
+  void setNumberDices(int numberDices) {
+    state = state.copyWith(numberDices: numberDices);
   }
 }
 

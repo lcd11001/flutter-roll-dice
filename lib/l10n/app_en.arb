@@ -1,4 +1,28 @@
 {
     "txt_app_title": "Simple Roll Dice",
-    "txt_btn_roll": "Roll Dice"
+    "txt_btn_roll": "Roll Dice",
+    "txt_btn_close": "Close",
+    "txt_settings_title": "Settings",
+    "txt_settings_audio": "Sound effect: {value}",
+    "@txt_settings_audio": {
+        "placeholders": {
+            "value": {
+                "type": "String",
+                "example": "On",
+                "description": "On or Off"
+            }
+        }
+    },
+    "txt_settings_number_dices": "Number dices: {value}",
+    "@txt_settings_number_dices": {
+        "placeholders": {
+            "value": {
+                "type": "int",
+                "example": "1",
+                "description": "Number of dices [1-3]"
+            }
+        }
+    },
+    "txt_settings_on": "On",
+    "txt_settings_off": "Off"
 }

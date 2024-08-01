@@ -35,7 +35,7 @@ class SettingsPopup extends ConsumerWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  "loc.settings_title",
+                  loc.txt_settings_title,
                   style: GoogleFonts.getFont("Yeseva One").copyWith(
                     fontSize: 24,
                     fontWeight: FontWeight.bold,
@@ -43,16 +43,27 @@ class SettingsPopup extends ConsumerWidget {
                 ),
                 const SizedBox(height: 16),
                 _buildSwitch(
-                  title: "loc.settings_sound",
+                  title: loc.txt_settings_audio(settings.allowAudio
+                      ? loc.txt_settings_on
+                      : loc.txt_settings_off),
                   value: settings.allowAudio,
                   onChanged: (value) => settingsNotifier.toggleAllowAudio(),
+                ),
+                const SizedBox(height: 16),
+                _buildSlider(
+                  title: loc.txt_settings_number_dices(settings.numberDices),
+                  minValue: settings.minDices,
+                  maxValue: settings.maxDices,
+                  value: settings.numberDices,
+                  divisions: settings.maxDices - settings.minDices,
+                  onChanged: (value) => settingsNotifier.setNumberDices(value),
                 ),
                 const SizedBox(height: 24),
                 Align(
                   alignment: Alignment.centerRight,
                   child: TextButton(
                     onPressed: () => onClose(settingsNotifier),
-                    child: Text("loc.btn_close"),
+                    child: Text(loc.txt_btn_close),
                   ),
                 ),
               ],
@@ -71,10 +82,44 @@ class SettingsPopup extends ConsumerWidget {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        Text(title),
+        Text(
+          title,
+          style: GoogleFonts.getFont("Yeseva One").copyWith(
+            fontSize: 18,
+          ),
+        ),
         Switch(
           value: value,
           onChanged: onChanged,
+        ),
+      ],
+    );
+  }
+
+  Widget _buildSlider({
+    required String title,
+    required int value,
+    required ValueChanged<int> onChanged,
+    int minValue = 0,
+    int maxValue = 10,
+    int divisions = 3,
+  }) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          title,
+          style: GoogleFonts.getFont("Yeseva One").copyWith(
+            fontSize: 18,
+          ),
+        ),
+        Slider(
+          value: value.toDouble(),
+          min: minValue.toDouble(),
+          max: maxValue.toDouble(),
+          divisions: divisions,
+          label: value.toString(),
+          onChanged: (value) => onChanged(value.toInt()),
         ),
       ],
     );
