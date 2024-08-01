@@ -37,9 +37,13 @@ class ProviderSettingsNotifier extends StateNotifier<ProviderSettings> {
   void toggleShowSettings() {
     state = state.copyWith(showSettings: !state.showSettings);
   }
+
+  void toggleAllowAudio() {
+    state = state.copyWith(allowAudio: !state.allowAudio);
+  }
 }
 
-final providerSettingsProvider =
+final settingsProvider =
     StateNotifierProvider<ProviderSettingsNotifier, ProviderSettings>((ref) {
   return ProviderSettingsNotifier();
 });

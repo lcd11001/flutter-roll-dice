@@ -6,15 +6,18 @@ import 'dart:math';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 import 'package:simple_roll_dice/dice_image.dart';
 import 'package:simple_roll_dice/dice_roller.dart';
 import 'package:simple_roll_dice/dice_roller_3d.dart';
+import 'package:simple_roll_dice/providers/provider_settings.dart';
 import 'package:simple_roll_dice/result_text.dart';
 import 'package:simple_roll_dice/styled_text.dart';
+import 'package:simple_roll_dice/widgets/settings_popup.dart';
 
-class GradientContainer extends StatefulWidget {
+class GradientContainer extends ConsumerStatefulWidget {
   final List<Color> colors;
 
   const GradientContainer({super.key, required this.colors});
@@ -23,7 +26,7 @@ class GradientContainer extends StatefulWidget {
       : colors = const [Colors.purple, Colors.deepPurple];
 
   @override
-  State<GradientContainer> createState() => _GradientContainerState();
+  ConsumerState<GradientContainer> createState() => _GradientContainerState();
 }
 
 const int _numberOfRolls = 5;
@@ -37,7 +40,7 @@ const int _minNumDice = 1;
 
 final randomizer = Random();
 
-class _GradientContainerState extends State<GradientContainer>
+class _GradientContainerState extends ConsumerState<GradientContainer>
     with SingleTickerProviderStateMixin {
   late int _numDice;
   late int _isLoading;
@@ -116,6 +119,9 @@ class _GradientContainerState extends State<GradientContainer>
     // Adjust the width as needed
     final maxDiceWidth = MediaQuery.of(context).size.width / 2 - 16;
 
+    // watch the settings provider state
+    final provider = ref.watch(settingsProvider);
+
     return Stack(
       children: [
         Container(
@@ -183,6 +189,9 @@ class _GradientContainerState extends State<GradientContainer>
               ),
             ),
           ),
+
+        // show settings popup if needed
+        if (provider.showSettings) const SettingsPopup(),
       ],
     );
   }

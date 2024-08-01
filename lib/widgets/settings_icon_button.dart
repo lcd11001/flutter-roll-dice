@@ -7,8 +7,7 @@ class SettingsIconButton extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final providerSettingsNotifier =
-        ref.read(providerSettingsProvider.notifier);
+    final providerSettingsNotifier = ref.read(settingsProvider.notifier);
 
     return IconButton(
       padding: EdgeInsets.zero, // Remove default padding
