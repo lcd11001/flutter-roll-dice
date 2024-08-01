@@ -1,26 +1,28 @@
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:simple_roll_dice/providers/provider_settings.dart';
 
-class ResultText extends StatefulWidget {
+class ResultText extends ConsumerStatefulWidget {
   final int number;
-  final int duration;
+  final int milisecondsDuration;
   final void Function(PlayerState)? onCompleted;
 
   const ResultText({
     super.key,
     required this.number,
-    this.duration = 500,
+    this.milisecondsDuration = 500,
     this.onCompleted,
   });
 
   @override
-  State<ResultText> createState() => _ResultTextState();
+  ConsumerState<ResultText> createState() => _ResultTextState();
 }
 
-class _ResultTextState extends State<ResultText>
+class _ResultTextState extends ConsumerState<ResultText>
     with SingleTickerProviderStateMixin {
   late final AnimationController _controller;
   late final CurvedAnimation _curvedAnimation;
@@ -39,7 +41,7 @@ class _ResultTextState extends State<ResultText>
 
     _audioPlayer.onPlayerStateChanged.listen((event) {
       debugPrint('Player state changed: $event');
-      widget.onCompleted?.call(event);
+      _handleCompletion(event);
     });
 
     googleFontsPending = GoogleFonts.pendingFonts([
@@ -47,7 +49,7 @@ class _ResultTextState extends State<ResultText>
     ]);
 
     _controller = AnimationController(
-      duration: Duration(milliseconds: widget.duration),
+      duration: Duration(milliseconds: widget.milisecondsDuration),
       vsync: this,
     );
 
@@ -74,11 +76,33 @@ class _ResultTextState extends State<ResultText>
   }
 
   Future<void> _playSound(String url) async {
+    final settings = ref.watch(settingsProvider);
+    if (!settings.allowAudio) {
+      // If sound is not allowed, we'll wait for the animation to complete
+      // before raising the completion event
+      _controller.addStatusListener(
+        (status) {
+          if (status == AnimationStatus.completed) {
+            _handleCompletion(PlayerState.completed);
+          }
+        },
+      );
+      return;
+    }
+
     try {
       debugPrint('Playing sound: $url');
       await _audioPlayer.play(UrlSource(url), mode: PlayerMode.mediaPlayer);
     } catch (e) {
       debugPrint('Error playing sound: $e');
+      // If there's an error playing the sound, we'll still complete the animation
+      _handleCompletion(PlayerState.completed);
+    }
+  }
+
+  void _handleCompletion(PlayerState state) {
+    if (state == PlayerState.completed) {
+      widget.onCompleted?.call(state);
     }
   }
 

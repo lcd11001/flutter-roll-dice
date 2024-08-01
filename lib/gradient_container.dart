@@ -117,7 +117,7 @@ class _GradientContainerState extends ConsumerState<GradientContainer>
     final maxDiceWidth = MediaQuery.of(context).size.width / 2 - 16;
 
     // watch the settings provider state
-    final provider = ref.watch(settingsProvider);
+    final settings = ref.watch(settingsProvider);
 
     return Stack(
       children: [
@@ -182,13 +182,14 @@ class _GradientContainerState extends ConsumerState<GradientContainer>
             child: Center(
               child: ResultText(
                 number: _dicePoints,
+                milisecondsDuration: settings.allowAudio ? 500 : 1500,
                 onCompleted: _onShowResultCompleted,
               ),
             ),
           ),
 
         // show settings popup if needed
-        if (provider.showSettings) const SettingsPopup(),
+        if (settings.showSettings) const SettingsPopup(),
       ],
     );
   }
@@ -351,6 +352,11 @@ class _GradientContainerState extends ConsumerState<GradientContainer>
   }
 
   Future<void> _playSound(int num) async {
+    final settings = ref.read(settingsProvider);
+    if (!settings.allowAudio) {
+      return;
+    }
+
     try {
       if (num == 1) {
         // await _audioDiceSingleRolling.start(volume: 1.0);
@@ -397,6 +403,11 @@ class _GradientContainerState extends ConsumerState<GradientContainer>
   }
 
   Future<void> _stopSound() async {
+    final settings = ref.read(settingsProvider);
+    if (!settings.allowAudio) {
+      return;
+    }
+
     try {
       await _audioDiceRolling.stop();
       await _audioDiceSingleRolling.stop();
