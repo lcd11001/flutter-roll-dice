@@ -38,7 +38,7 @@ class _GradientContainerState extends State<GradientContainer>
     with SingleTickerProviderStateMixin {
   List<DiceRoller3D> _diceRollers = [];
   int _isLoading = 3;
-  int _isRolling = 3;
+  int _isRolling = 0;
   int _diceNumber = 0;
   bool _showResult = false;
   double _diceVerticalPosition = -100.0;
@@ -196,6 +196,21 @@ class _GradientContainerState extends State<GradientContainer>
   }
 
   void _onRollDice() {
+    if (_isLoading > 0) {
+      debugPrint('Still loading');
+      return;
+    }
+
+    if (_isRolling > 0) {
+      debugPrint('Still rolling');
+      return;
+    }
+
+    if (_showResult) {
+      debugPrint('Still showing result');
+      return;
+    }
+
     setState(() {
       _diceNumber = 0;
       _isRolling = 3;
