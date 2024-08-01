@@ -35,14 +35,10 @@ const int _milliseconds = 300;
 const double _dropHeight = -500;
 const double _dropGround = -200;
 
-const int _maxNumDice = 3;
-const int _minNumDice = 1;
-
 final randomizer = Random();
 
 class _GradientContainerState extends ConsumerState<GradientContainer>
     with SingleTickerProviderStateMixin {
-  late int _numDice;
   late int _isLoading;
 
   int _isRolling = 0;
@@ -63,8 +59,9 @@ class _GradientContainerState extends ConsumerState<GradientContainer>
   void initState() {
     super.initState();
 
-    _numDice = _maxNumDice;
-    _isLoading = _numDice;
+    final settings = ref.read(settingsProvider);
+
+    _isLoading = settings.numberDices;
     _dropDuration = _numberOfRolls * _milliseconds;
 
     googleFontsPending = GoogleFonts.pendingFonts([
@@ -197,7 +194,8 @@ class _GradientContainerState extends ConsumerState<GradientContainer>
   }
 
   List<Widget> buildDices(double maxDiceWidth) {
-    return List.generate(_numDice, (index) {
+    final settings = ref.read(settingsProvider);
+    return List.generate(settings.numberDices, (index) {
       return buildDice(maxDiceWidth);
     });
   }
@@ -231,12 +229,12 @@ class _GradientContainerState extends ConsumerState<GradientContainer>
       debugPrint('Not ready');
       return;
     }
-
-    _playSound(_numDice);
+    final settings = ref.read(settingsProvider);
+    _playSound(settings.numberDices);
 
     setState(() {
       _dicePoints = 0;
-      _isRolling = _numDice;
+      _isRolling = settings.numberDices;
       _showResult = false;
     });
 
@@ -279,26 +277,32 @@ class _GradientContainerState extends ConsumerState<GradientContainer>
   }
 
   buildOptions() {
+    final settings = ref.read(settingsProvider);
+    final settingsNotifier = ref.read(settingsProvider.notifier);
+
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         IconButton(
           icon: Icon(
             Icons.remove,
-            color: _numDice == _minNumDice ? Colors.grey : Colors.white,
+            color: settings.numberDices == settings.minDices
+                ? Colors.grey
+                : Colors.white,
             size: 24,
           ),
           onPressed: () {
-            if (_numDice > _minNumDice && isReady()) {
+            if (settings.numberDices > settings.minDices && isReady()) {
               setState(() {
                 _diceRollers.removeLast();
-                _numDice--;
+                //_numDice--;
+                settingsNotifier.setNumberDices(settings.numberDices - 1);
               });
             }
           },
         ),
         Text(
-          '$_numDice',
+          '${settings.numberDices}',
           style: GoogleFonts.getFont("Yeseva One").copyWith(
             fontSize: 24,
             fontWeight: FontWeight.bold,
@@ -308,14 +312,17 @@ class _GradientContainerState extends ConsumerState<GradientContainer>
         IconButton(
           icon: Icon(
             Icons.add,
-            color: _numDice == _maxNumDice ? Colors.grey : Colors.white,
+            color: settings.numberDices == settings.maxDices
+                ? Colors.grey
+                : Colors.white,
             size: 24,
           ),
           onPressed: () {
-            if (_numDice < _maxNumDice && isReady()) {
+            if (settings.numberDices < settings.maxDices && isReady()) {
               setState(() {
-                _numDice++;
-                _isLoading = (_numDice - _diceRollers.length);
+                //_numDice++;
+                settingsNotifier.setNumberDices(settings.numberDices + 1);
+                _isLoading = 1;
               });
             }
           },

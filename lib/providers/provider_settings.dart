@@ -11,8 +11,6 @@ class ProviderSettings {
     required this.numberDices,
     required this.allowAudio,
     required this.showSettings,
-    this.minDices = 1,
-    this.maxDices = 3,
   });
 
   ProviderSettings copyWith({
@@ -21,7 +19,7 @@ class ProviderSettings {
     bool? showSettings,
   }) {
     return ProviderSettings._(
-      numberDices: numberDices ?? this.numberDices,
+      numberDices: (numberDices ?? this.numberDices).clamp(minDices, maxDices),
       allowAudio: allowAudio ?? this.allowAudio,
       showSettings: showSettings ?? this.showSettings,
     );
@@ -47,7 +45,8 @@ class ProviderSettingsNotifier extends StateNotifier<ProviderSettings> {
   }
 
   void setNumberDices(int numberDices) {
-    state = state.copyWith(numberDices: numberDices);
+    state = state.copyWith(
+        numberDices: numberDices.clamp(state.minDices, state.maxDices));
   }
 }
 
