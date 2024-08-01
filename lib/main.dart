@@ -4,8 +4,9 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:simple_roll_dice/app.dart';
+import 'package:simple_roll_dice/providers/provider_settings.dart';
 
-void main() {
+Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   GoogleFonts.config.allowRuntimeFetching = false;
@@ -34,9 +35,13 @@ void main() {
     debugPrint("Error: $e");
   }
 
+  final container = ProviderContainer();
+  await container.read(settingsProvider.notifier).loadSettings();
+
   runApp(
-    const ProviderScope(
-      child: App(),
+    UncontrolledProviderScope(
+      container: container,
+      child: const App(),
     ),
   );
 }
