@@ -3,6 +3,7 @@
     "txt_app_title": "Simple Roll Dice",
     "txt_btn_roll": "Roll Dice",
     "txt_btn_close": "Close",
+    "txt_btn_about": "About",
     "txt_settings_title": "Settings",
     "txt_settings_audio": "Sound effect: {value}",
     "@txt_settings_audio": {
@@ -25,5 +26,21 @@
         }
     },
     "txt_settings_on": "On",
-    "txt_settings_off": "Off"
+    "txt_settings_off": "Off",
+    "txt_app_legalese": "© 2024 LCD Soft",
+    "txt_app_version": "Version {number}-{buildNumber}",
+    "@txt_app_version": {
+        "placeholders": {
+            "number": {
+                "type": "String",
+                "example": "1.0.0",
+                "description": "Version number"
+            },
+            "buildNumber": {
+                "type": "String",
+                "example": "1",
+                "description": "Build number"
+            }
+        }
+    }
 }

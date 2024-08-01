@@ -13,19 +13,19 @@ void main() {
   try {
     LicenseRegistry.addLicense(() async* {
       final licensePacifico =
-          await rootBundle.loadString('google_fonts/Pacifico/OFL.txt');
+          await rootBundle.loadString('assets/google_fonts/Pacifico/OFL.txt');
       debugPrint("Pacifico: $licensePacifico");
       yield LicenseEntryWithLineBreaks(
           ['google_fonts/Pacifico'], licensePacifico);
 
-      final licenseBlackOpsOne =
-          await rootBundle.loadString('google_fonts/Black_Ops_One/OFL.txt');
+      final licenseBlackOpsOne = await rootBundle
+          .loadString('assets/google_fonts/Black_Ops_One/OFL.txt');
       debugPrint("BlackOpsOne: $licenseBlackOpsOne");
       yield LicenseEntryWithLineBreaks(
           ['google_fonts/Black_Ops_One'], licenseBlackOpsOne);
 
       final licenseYesevaOne =
-          await rootBundle.loadString('google_fonts/Yeseva_One/OFL.txt');
+          await rootBundle.loadString('assets/google_fonts/Yeseva_One/OFL.txt');
       debugPrint("YesevaOne: $licenseYesevaOne");
       yield LicenseEntryWithLineBreaks(
           ['google_fonts/Yeseva_One'], licenseYesevaOne);

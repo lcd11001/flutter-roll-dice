@@ -32,6 +32,8 @@ class App extends StatelessWidget {
   }
 
   Widget builderAppVersion(BuildContext context, PackageInfo packageInfo) {
+    final loc = AppLocalizations.of(context)!;
+
     return Container(
       width: double.infinity,
       margin: const EdgeInsets.only(
@@ -45,7 +47,7 @@ class App extends StatelessWidget {
         children: [
           const SettingsIconButton(),
           Text(
-            'Version: ${packageInfo.version}-${packageInfo.buildNumber}',
+            loc.txt_app_version(packageInfo.version, packageInfo.buildNumber),
             style: const TextStyle(
               fontSize: 15,
               color: Colors.white,

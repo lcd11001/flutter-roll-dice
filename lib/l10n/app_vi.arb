@@ -3,6 +3,7 @@
     "txt_app_title": "Đỗ Xí Ngầu",
     "txt_btn_roll": "Lắc",
     "txt_btn_close": "Đóng",
+    "txt_btn_about": "Thông Tin",
     "txt_settings_title": "Cài Đặt",
     "txt_settings_audio": "Âm thanh: {value}",
     "@txt_settings_audio": {

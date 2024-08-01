@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 import 'package:simple_roll_dice/providers/provider_settings.dart';
 
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -59,12 +60,18 @@ class SettingsPopup extends ConsumerWidget {
                   onChanged: (value) => settingsNotifier.setNumberDices(value),
                 ),
                 const SizedBox(height: 24),
-                Align(
-                  alignment: Alignment.centerRight,
-                  child: TextButton(
-                    onPressed: () => onClose(settingsNotifier),
-                    child: Text(loc.txt_btn_close),
-                  ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    TextButton(
+                      onPressed: () => _showAboutDialog(context),
+                      child: Text(loc.txt_btn_about),
+                    ),
+                    TextButton(
+                      onPressed: () => onClose(settingsNotifier),
+                      child: Text(loc.txt_btn_close),
+                    ),
+                  ],
                 ),
               ],
             ),
@@ -128,5 +135,25 @@ class SettingsPopup extends ConsumerWidget {
   void onClose(ProviderSettingsNotifier settingsNotifier) {
     debugPrint("close");
     settingsNotifier.toggleShowSettings();
+  }
+
+  Future<void> _showAboutDialog(BuildContext context) async {
+    final PackageInfo packageInfo = await PackageInfo.fromPlatform();
+
+    if (!context.mounted) return;
+
+    final loc = AppLocalizations.of(context)!;
+    showAboutDialog(
+      context: context,
+      applicationName: packageInfo.appName,
+      applicationVersion:
+          loc.txt_app_version(packageInfo.version, packageInfo.buildNumber),
+      applicationIcon: Image.asset(
+        'assets/icons/icon_1024x1024.png',
+        width: 48,
+        height: 48,
+      ),
+      applicationLegalese: loc.txt_app_legalese,
+    );
   }
 }
