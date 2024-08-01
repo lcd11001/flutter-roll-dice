@@ -29,7 +29,6 @@ class GradientContainer extends StatefulWidget {
 const int _numberOfRolls = 5;
 const int _milliseconds = 300;
 
-const int _dropDuration = 1000;
 const double _dropHeight = -500;
 
 const int _maxNumDice = 3;
@@ -41,15 +40,20 @@ class _GradientContainerState extends State<GradientContainer>
     with SingleTickerProviderStateMixin {
   late int _numDice;
   late int _isLoading;
+
   int _isRolling = 0;
   int _dicePoints = 0;
   bool _showResult = false;
   double _diceVerticalPosition = -100.0;
   final List<DiceRoller3DState> _diceRollers = List.empty(growable: true);
 
+  late final AudioPlayer _audioDiceRolling;
+  late final AudioPlayer _audioDiceSingleRolling;
+
   late final AnimationController _diceAnimationController;
   late final Animation<double> _diceAnimation;
   late final Future googleFontsPending;
+  late int _dropDuration;
 
   @override
   void initState() {
@@ -57,13 +61,32 @@ class _GradientContainerState extends State<GradientContainer>
 
     _numDice = _maxNumDice;
     _isLoading = _numDice;
+    _dropDuration = _numberOfRolls * _milliseconds;
 
     googleFontsPending = GoogleFonts.pendingFonts([
       GoogleFonts.yesevaOne(),
     ]);
 
+    _audioDiceRolling = AudioPlayer();
+    _audioDiceRolling.setSourceAsset("sounds/dice_rolling.mp3");
+    _audioDiceRolling.setReleaseMode(ReleaseMode.stop);
+
+    // AudioPool.createFromAsset(path: "sounds/dice_rolling.mp3", maxPlayers: 2)
+    //     .then((pool) {
+    //   _audioDiceRolling = pool;
+    // });
+
+    _audioDiceSingleRolling = AudioPlayer();
+    _audioDiceSingleRolling.setSourceAsset("sounds/dice_single_rolling.mp3");
+    _audioDiceSingleRolling.setReleaseMode(ReleaseMode.stop);
+    // AudioPool.createFromAsset(
+    //         path: "sounds/dice_single_rolling.mp3", maxPlayers: 2)
+    //     .then((pool) {
+    //   _audioDiceSingleRolling = pool;
+    // });
+
     _diceAnimationController = AnimationController(
-      duration: const Duration(milliseconds: _dropDuration),
+      duration: Duration(milliseconds: _dropDuration),
       vsync: this,
     );
 
@@ -80,6 +103,8 @@ class _GradientContainerState extends State<GradientContainer>
   @override
   void dispose() {
     _diceAnimationController.dispose();
+    _audioDiceRolling.dispose();
+    _audioDiceSingleRolling.dispose();
     super.dispose();
   }
 
@@ -196,6 +221,10 @@ class _GradientContainerState extends State<GradientContainer>
       return;
     }
 
+    _playSound(_numDice > 1
+        ? 'sounds/dice_rolling.mp3'
+        : 'sounds/dice_single_rolling.mp3');
+
     setState(() {
       _dicePoints = 0;
       _isRolling = _numDice;
@@ -216,7 +245,7 @@ class _GradientContainerState extends State<GradientContainer>
     });
 
     if (_isLoading == 0) {
-      _diceAnimationController.forward(from: 0.0);
+      _diceAnimationController.forward(from: 1.0);
     }
   }
 
@@ -226,6 +255,10 @@ class _GradientContainerState extends State<GradientContainer>
       _dicePoints += face;
       _showResult = _isRolling == 0;
     });
+
+    if (_showResult) {
+      _stopSound();
+    }
   }
 
   void _onShowResultCompleted(PlayerState state) {
@@ -299,5 +332,29 @@ class _GradientContainerState extends State<GradientContainer>
     }
 
     return true;
+  }
+
+  Future<void> _playSound(String url) async {
+    try {
+      debugPrint('Playing sound: $url');
+      if (_numDice == 1) {
+        // await _audioDiceSingleRolling.start(volume: 1.0);
+        _audioDiceSingleRolling.resume();
+      } else {
+        // await _audioDiceRolling.start(volume: 1.0);
+        _audioDiceRolling.resume();
+      }
+    } catch (e) {
+      debugPrint('Error playing sound: $e');
+    }
+  }
+
+  Future<void> _stopSound() async {
+    try {
+      await _audioDiceRolling.stop();
+      await _audioDiceSingleRolling.stop();
+    } catch (e) {
+      debugPrint('Error stopping sound: $e');
+    }
   }
 }
