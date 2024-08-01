@@ -12,7 +12,7 @@ class StyledText extends StatefulWidget {
 }
 
 class _StyledTextState extends State<StyledText> {
-  late Future googleFontsPending;
+  late final Future googleFontsPending;
 
   @override
   void initState() {

@@ -32,19 +32,22 @@ const int _milliseconds = 300;
 const int _dropDuration = 1000;
 const double _dropHeight = -500;
 
+const int _maxNumDice = 3;
+const int _minNumDice = 1;
+
 final randomizer = Random();
 
 class _GradientContainerState extends State<GradientContainer>
     with SingleTickerProviderStateMixin {
-  List<DiceRoller3D> _diceRollers = [];
-  int _isLoading = 3;
+  int _isLoading = _maxNumDice;
   int _isRolling = 0;
   int _dicePoints = 0;
   bool _showResult = false;
   double _diceVerticalPosition = -100.0;
-  late AnimationController _diceAnimationController;
-  late Animation<double> _diceAnimation;
-  late Future googleFontsPending;
+  late final List<DiceRoller3D> _diceRollers;
+  late final AnimationController _diceAnimationController;
+  late final Animation<double> _diceAnimation;
+  late final Future googleFontsPending;
 
   @override
   void initState() {

@@ -26,7 +26,7 @@ class _ResultTextState extends State<ResultText>
   late final CurvedAnimation _curvedAnimation;
   late final Animation<double> _animation;
 
-  late Future googleFontsPending;
+  late final Future googleFontsPending;
 
   final AudioPlayer _audioPlayer = AudioPlayer();
 
