@@ -97,6 +97,7 @@ class _GradientContainerState extends State<GradientContainer>
       ),
     )..addListener(() {
         _diceVerticalPosition = _diceAnimation.value;
+        // debugPrint('Dice vertical position: $_diceVerticalPosition');
       });
   }
 
@@ -336,16 +337,40 @@ class _GradientContainerState extends State<GradientContainer>
     try {
       if (num == 1) {
         // await _audioDiceSingleRolling.start(volume: 1.0);
-        _audioDiceSingleRolling.resume();
+        Timer.periodic(
+          const Duration(milliseconds: 50),
+          (timer) {
+            if (_diceVerticalPosition > -150) {
+              debugPrint(
+                  'Play single rolling sound  at $_diceVerticalPosition');
+              _audioDiceSingleRolling.resume();
+              timer.cancel();
+            }
+          },
+        );
       } else {
         // await _audioDiceRolling.start(volume: 1.0);
-        _audioDiceRolling.resume();
+        // _audioDiceRolling.resume();
 
         Timer.periodic(
-          Duration(milliseconds: 100 + randomizer.nextInt(200)),
+          const Duration(milliseconds: 50),
           (timer) {
-            _audioDiceSingleRolling.resume();
-            timer.cancel();
+            if (_diceVerticalPosition > -150) {
+              debugPrint('Play rolling sound  at $_diceVerticalPosition');
+              _audioDiceRolling.resume();
+              timer.cancel();
+            }
+          },
+        );
+
+        Timer.periodic(
+          const Duration(milliseconds: 150),
+          (timer) {
+            if (_diceVerticalPosition > -150) {
+              debugPrint('Play single rolling sound at $_diceVerticalPosition');
+              _audioDiceSingleRolling.resume();
+              timer.cancel();
+            }
           },
         );
       }
