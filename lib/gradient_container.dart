@@ -3,6 +3,7 @@
 import 'dart:async';
 import 'dart:math';
 
+import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -27,9 +28,10 @@ class GradientContainer extends StatefulWidget {
 
 const int _numberOfRolls = 5;
 const int _milliseconds = 300;
-const int _resultDuration = 2000;
+
 const int _dropDuration = 1000;
 const double _dropHeight = -500;
+
 final randomizer = Random();
 
 class _GradientContainerState extends State<GradientContainer>
@@ -181,7 +183,10 @@ class _GradientContainerState extends State<GradientContainer>
               Container(
                 color: Colors.black.withOpacity(0.5),
                 child: Center(
-                  child: ResultText(number: _diceNumber),
+                  child: ResultText(
+                    number: _diceNumber,
+                    onCompleted: _onShowResultCompleted,
+                  ),
                 ),
               ),
           ],
@@ -195,20 +200,23 @@ class _GradientContainerState extends State<GradientContainer>
       _diceNumber = 0;
       _isRolling = 3;
       _showResult = false;
-
-      _diceAnimationController.forward(from: 0.0);
-
-      for (final diceRoller in _diceRollers) {
-        diceRoller.rollDice();
-      }
     });
+
+    _diceAnimationController.forward(from: 0.0);
+
+    for (final diceRoller in _diceRollers) {
+      diceRoller.rollDice();
+    }
   }
 
   void _onDiceCreated(DiceRoller3D roller) {
     setState(() {
       _isLoading--;
-      _diceAnimationController.forward(from: 0.0);
     });
+
+    if (_isLoading == 0) {
+      _diceAnimationController.forward(from: 0.0);
+    }
   }
 
   void _onDiceRollCompleted(int face) {
@@ -217,14 +225,12 @@ class _GradientContainerState extends State<GradientContainer>
       _diceNumber += face;
       _showResult = _isRolling == 0;
     });
+  }
 
-    if (_isRolling == 0) {
-      debugPrint('Dice number: $_diceNumber');
-      Timer.periodic(const Duration(milliseconds: _resultDuration), (timer) {
-        setState(() {
-          _showResult = false;
-        });
-        timer.cancel();
+  void _onShowResultCompleted(PlayerState state) {
+    if (state == PlayerState.completed) {
+      setState(() {
+        _showResult = false;
       });
     }
   }

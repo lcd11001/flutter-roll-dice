@@ -7,11 +7,13 @@ import 'package:google_fonts/google_fonts.dart';
 class ResultText extends StatefulWidget {
   final int number;
   final int duration;
+  final void Function(PlayerState)? onCompleted;
 
   const ResultText({
     super.key,
     required this.number,
     this.duration = 500,
+    this.onCompleted,
   });
 
   @override
@@ -27,12 +29,18 @@ class _ResultTextState extends State<ResultText>
   late Future googleFontsPending;
 
   final AudioPlayer _audioPlayer = AudioPlayer();
+
   final soundUrl =
       'https://www.sorobanexam.org/tools/tts?number={number}&lang={language}';
 
   @override
   void initState() {
     super.initState();
+
+    _audioPlayer.onPlayerStateChanged.listen((event) {
+      debugPrint('Player state changed: $event');
+      widget.onCompleted?.call(event);
+    });
 
     googleFontsPending = GoogleFonts.pendingFonts([
       GoogleFonts.blackOpsOne(),
