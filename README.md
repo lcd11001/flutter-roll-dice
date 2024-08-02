@@ -2,6 +2,10 @@
 
 A new Flutter project.
 
+<img src="docs/Pixel8_01.png" alt="Pixel8" width="296.75" height="628.25" style="margin-right: 10px;">
+<img src="docs/Pixel8_03.png" alt="Pixel8" width="296.75" height="628.25" style="margin-right: 10px;">
+<img src="docs/Pixel8_02.png" alt="Pixel8" width="296.75" height="628.25" style="margin-right: 10px;">
+
 ## Getting Started
 
 This project is a starting point for a Flutter application.
