@@ -4,7 +4,7 @@ import 'package:package_info_plus/package_info_plus.dart';
 import 'package:simple_roll_dice/app_version.dart';
 import 'package:simple_roll_dice/gradient_container.dart';
 
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:simple_roll_dice/l10n/generated/app_localizations.dart';
 import 'package:simple_roll_dice/widgets/settings_icon_button.dart';
 
 class App extends StatelessWidget {

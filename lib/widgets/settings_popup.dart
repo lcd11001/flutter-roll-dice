@@ -4,7 +4,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:simple_roll_dice/providers/provider_settings.dart';
 
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:simple_roll_dice/l10n/generated/app_localizations.dart';
 
 class SettingsPopup extends ConsumerWidget {
   const SettingsPopup({super.key});
