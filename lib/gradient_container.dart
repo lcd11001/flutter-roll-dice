@@ -178,7 +178,7 @@ class _GradientContainerState extends ConsumerState<GradientContainer>
         ),
         if (_showResult)
           Container(
-            color: Colors.black.withOpacity(0.5),
+            color: Colors.black.withAlpha(128),
             child: Center(
               child: ResultText(
                 number: _dicePoints,

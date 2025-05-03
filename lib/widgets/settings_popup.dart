@@ -23,7 +23,7 @@ class SettingsPopup extends ConsumerWidget {
             //onTap: () => onClose(settingsNotifier),
             onTap: () => debugPrint("onTap back ground dialog"),
             child: Container(
-              color: Colors.black.withOpacity(0.5),
+              color: Colors.black.withAlpha(128),
             ),
           ),
         ),

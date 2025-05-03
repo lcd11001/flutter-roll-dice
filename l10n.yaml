@@ -7,3 +7,4 @@ template-arb-file: app_en.arb
 # run "flutter gen-l10n"  to generate the localization files
 # output-localization-file: app_localizations.dart
 output-dir: lib/l10n/generated
+untranslated-messages-file: l10_untranslated.json
