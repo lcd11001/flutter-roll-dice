@@ -23,7 +23,7 @@ class GradientContainer extends ConsumerStatefulWidget {
   const GradientContainer({super.key, required this.colors});
 
   const GradientContainer.purple({super.key})
-      : colors = const [Colors.purple, Colors.deepPurple];
+    : colors = const [Colors.purple, Colors.deepPurple];
 
   @override
   ConsumerState<GradientContainer> createState() => _GradientContainerState();
@@ -64,9 +64,7 @@ class _GradientContainerState extends ConsumerState<GradientContainer>
     _isLoading = settings.numberDices;
     _dropDuration = _numberOfRolls * _milliseconds;
 
-    googleFontsPending = GoogleFonts.pendingFonts([
-      GoogleFonts.yesevaOne(),
-    ]);
+    googleFontsPending = GoogleFonts.pendingFonts([GoogleFonts.yesevaOne()]);
 
     _audioDiceRolling = AudioPlayer();
     _audioDiceRolling.setSourceAsset("sounds/dice_rolling.mp3");
@@ -97,9 +95,9 @@ class _GradientContainerState extends ConsumerState<GradientContainer>
         curve: Curves.bounceOut,
       ),
     )..addListener(() {
-        _diceVerticalPosition = _diceAnimation.value;
-        // debugPrint('Dice vertical position: $_diceVerticalPosition');
-      });
+      _diceVerticalPosition = _diceAnimation.value;
+      // debugPrint('Dice vertical position: $_diceVerticalPosition');
+    });
   }
 
   @override
@@ -114,7 +112,14 @@ class _GradientContainerState extends ConsumerState<GradientContainer>
   Widget build(BuildContext context) {
     final loc = AppLocalizations.of(context)!;
     // Adjust the width as needed
-    final maxDiceWidth = MediaQuery.of(context).size.width / 2 - 16;
+    final double screenWidth = MediaQuery.of(context).size.width;
+    final double maxDiceWidth = max(0.0, screenWidth / 2 - 16);
+    debugPrint('Max dice width: $maxDiceWidth, screen width: $screenWidth');
+
+    if (screenWidth <= 0) {
+      debugPrint('!!!!!!! invalid screen width: $screenWidth');
+      return const SizedBox();
+    }
 
     // watch the settings provider state
     final settings = ref.watch(settingsProvider);
@@ -208,9 +213,7 @@ class _GradientContainerState extends ConsumerState<GradientContainer>
         return Transform.translate(
           offset: Offset(0, _diceVerticalPosition),
           child: ConstrainedBox(
-            constraints: BoxConstraints(
-              maxWidth: maxDiceWidth,
-            ),
+            constraints: BoxConstraints(maxWidth: maxDiceWidth),
             child: DiceRoller3D(
               fileName: 'assets/dice-3d/cube.obj',
               milliseconds: _milliseconds,
@@ -287,9 +290,10 @@ class _GradientContainerState extends ConsumerState<GradientContainer>
         IconButton(
           icon: Icon(
             Icons.remove,
-            color: settings.numberDices == settings.minDices
-                ? Colors.grey
-                : Colors.white,
+            color:
+                settings.numberDices == settings.minDices
+                    ? Colors.grey
+                    : Colors.white,
             size: 24,
           ),
           onPressed: () {
@@ -313,9 +317,10 @@ class _GradientContainerState extends ConsumerState<GradientContainer>
         IconButton(
           icon: Icon(
             Icons.add,
-            color: settings.numberDices == settings.maxDices
-                ? Colors.grey
-                : Colors.white,
+            color:
+                settings.numberDices == settings.maxDices
+                    ? Colors.grey
+                    : Colors.white,
             size: 24,
           ),
           onPressed: () {
@@ -360,42 +365,32 @@ class _GradientContainerState extends ConsumerState<GradientContainer>
     try {
       if (num == 1) {
         // await _audioDiceSingleRolling.start(volume: 1.0);
-        Timer.periodic(
-          const Duration(milliseconds: 50),
-          (timer) {
-            if (_diceVerticalPosition > _dropGround) {
-              debugPrint(
-                  'Play single rolling sound  at $_diceVerticalPosition');
-              _audioDiceSingleRolling.resume();
-              timer.cancel();
-            }
-          },
-        );
+        Timer.periodic(const Duration(milliseconds: 50), (timer) {
+          if (_diceVerticalPosition > _dropGround) {
+            debugPrint('Play single rolling sound  at $_diceVerticalPosition');
+            _audioDiceSingleRolling.resume();
+            timer.cancel();
+          }
+        });
       } else {
         // await _audioDiceRolling.start(volume: 1.0);
         // _audioDiceRolling.resume();
 
-        Timer.periodic(
-          const Duration(milliseconds: 50),
-          (timer) {
-            if (_diceVerticalPosition > _dropGround) {
-              debugPrint('Play rolling sound  at $_diceVerticalPosition');
-              _audioDiceRolling.resume();
-              timer.cancel();
-            }
-          },
-        );
+        Timer.periodic(const Duration(milliseconds: 50), (timer) {
+          if (_diceVerticalPosition > _dropGround) {
+            debugPrint('Play rolling sound  at $_diceVerticalPosition');
+            _audioDiceRolling.resume();
+            timer.cancel();
+          }
+        });
 
-        Timer.periodic(
-          const Duration(milliseconds: 120),
-          (timer) {
-            if (_diceVerticalPosition > _dropGround) {
-              debugPrint('Play single rolling sound at $_diceVerticalPosition');
-              _audioDiceSingleRolling.resume();
-              timer.cancel();
-            }
-          },
-        );
+        Timer.periodic(const Duration(milliseconds: 120), (timer) {
+          if (_diceVerticalPosition > _dropGround) {
+            debugPrint('Play single rolling sound at $_diceVerticalPosition');
+            _audioDiceSingleRolling.resume();
+            timer.cancel();
+          }
+        });
       }
     } catch (e) {
       debugPrint('Error playing sound: $e');
