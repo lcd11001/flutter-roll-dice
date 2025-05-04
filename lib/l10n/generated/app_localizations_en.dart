@@ -40,7 +40,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get txt_settings_off => 'Off';
 
   @override
-  String get txt_app_legalese => '© 2024 LCD Soft';
+  String txt_app_legalese(int year) {
+    return '© $year LCD Soft';
+  }
 
   @override
   String txt_app_version(String number, String buildNumber) {

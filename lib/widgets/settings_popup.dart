@@ -22,9 +22,7 @@ class SettingsPopup extends ConsumerWidget {
           child: GestureDetector(
             //onTap: () => onClose(settingsNotifier),
             onTap: () => debugPrint("onTap back ground dialog"),
-            child: Container(
-              color: Colors.black.withAlpha(128),
-            ),
+            child: Container(color: Colors.black.withAlpha(128)),
           ),
         ),
         // Dialog
@@ -37,16 +35,17 @@ class SettingsPopup extends ConsumerWidget {
               children: [
                 Text(
                   loc.txt_settings_title,
-                  style: GoogleFonts.getFont("Yeseva One").copyWith(
-                    fontSize: 24,
-                    fontWeight: FontWeight.bold,
-                  ),
+                  style: GoogleFonts.getFont(
+                    "Yeseva One",
+                  ).copyWith(fontSize: 24, fontWeight: FontWeight.bold),
                 ),
                 const SizedBox(height: 16),
                 _buildSwitch(
-                  title: loc.txt_settings_audio(settings.allowAudio
-                      ? loc.txt_settings_on
-                      : loc.txt_settings_off),
+                  title: loc.txt_settings_audio(
+                    settings.allowAudio
+                        ? loc.txt_settings_on
+                        : loc.txt_settings_off,
+                  ),
                   value: settings.allowAudio,
                   onChanged: (value) => settingsNotifier.toggleAllowAudio(),
                 ),
@@ -91,14 +90,9 @@ class SettingsPopup extends ConsumerWidget {
       children: [
         Text(
           title,
-          style: GoogleFonts.getFont("Yeseva One").copyWith(
-            fontSize: 18,
-          ),
+          style: GoogleFonts.getFont("Yeseva One").copyWith(fontSize: 18),
         ),
-        Switch(
-          value: value,
-          onChanged: onChanged,
-        ),
+        Switch(value: value, onChanged: onChanged),
       ],
     );
   }
@@ -116,9 +110,7 @@ class SettingsPopup extends ConsumerWidget {
       children: [
         Text(
           title,
-          style: GoogleFonts.getFont("Yeseva One").copyWith(
-            fontSize: 18,
-          ),
+          style: GoogleFonts.getFont("Yeseva One").copyWith(fontSize: 18),
         ),
         Slider(
           value: value.toDouble(),
@@ -146,32 +138,29 @@ class SettingsPopup extends ConsumerWidget {
     showAboutDialog(
       context: context,
       applicationName: packageInfo.appName,
-      applicationVersion:
-          loc.txt_app_version(packageInfo.version, packageInfo.buildNumber),
+      applicationVersion: loc.txt_app_version(
+        packageInfo.version,
+        packageInfo.buildNumber,
+      ),
       applicationIcon: Image.asset(
         'assets/icons/icon_1024x1024.png',
         width: 48,
         height: 48,
       ),
-      applicationLegalese: loc.txt_app_legalese,
+      applicationLegalese: loc.txt_app_legalese(DateTime.now().year),
       barrierColor: Colors.black.withAlpha(128),
       children: [
         const SizedBox(height: 16),
         Text(
           loc.txt_about_1,
-          style: GoogleFonts.getFont("Yeseva One").copyWith(
-            fontSize: 16,
-          ),
+          style: GoogleFonts.getFont("Yeseva One").copyWith(fontSize: 16),
         ),
         const SizedBox(height: 16),
         Text(
           loc.txt_about_2,
-          style: GoogleFonts.getFont("Yeseva One").copyWith(
-            fontSize: 16,
-          ),
+          style: GoogleFonts.getFont("Yeseva One").copyWith(fontSize: 16),
         ),
-      ]
-
+      ],
     );
   }
 }

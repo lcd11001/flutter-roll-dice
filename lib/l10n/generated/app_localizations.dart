@@ -152,8 +152,8 @@ abstract class AppLocalizations {
   /// No description provided for @txt_app_legalese.
   ///
   /// In en, this message translates to:
-  /// **'© 2024 LCD Soft'**
-  String get txt_app_legalese;
+  /// **'© {year} LCD Soft'**
+  String txt_app_legalese(int year);
 
   /// No description provided for @txt_app_version.
   ///

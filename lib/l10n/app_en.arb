@@ -27,7 +27,16 @@
     },
     "txt_settings_on": "On",
     "txt_settings_off": "Off",
-    "txt_app_legalese": "© 2024 LCD Soft",
+    "txt_app_legalese": "© {year} LCD Soft",
+    "@txt_app_legalese": {
+        "placeholders": {
+            "year": {
+                "type": "int",
+                "example": "2023",
+                "description": "Year of copyright"
+            }
+        }
+    },
     "txt_app_version": "Version {number}-{buildNumber}",
     "@txt_app_version": {
         "placeholders": {
