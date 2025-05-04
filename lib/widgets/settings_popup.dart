@@ -154,6 +154,24 @@ class SettingsPopup extends ConsumerWidget {
         height: 48,
       ),
       applicationLegalese: loc.txt_app_legalese,
+      barrierColor: Colors.black.withAlpha(128),
+      children: [
+        const SizedBox(height: 16),
+        Text(
+          loc.txt_about_1,
+          style: GoogleFonts.getFont("Yeseva One").copyWith(
+            fontSize: 16,
+          ),
+        ),
+        const SizedBox(height: 16),
+        Text(
+          loc.txt_about_2,
+          style: GoogleFonts.getFont("Yeseva One").copyWith(
+            fontSize: 16,
+          ),
+        ),
+      ]
+
     );
   }
 }

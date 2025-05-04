@@ -160,6 +160,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Version {number}-{buildNumber}'**
   String txt_app_version(String number, String buildNumber);
+
+  /// No description provided for @txt_about_1.
+  ///
+  /// In en, this message translates to:
+  /// **'Roll Dice is a lightweight and easy-to-use app for rolling dice anytime, anywhere. Whether you\'re playing a board game or just need a random number, this app is here to help!'**
+  String get txt_about_1;
+
+  /// No description provided for @txt_about_2.
+  ///
+  /// In en, this message translates to:
+  /// **'This app is free to use. To support the developer and keep improving the app, a small banner ad is displayed. Thank you for your support!'**
+  String get txt_about_2;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

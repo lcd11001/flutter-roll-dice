@@ -46,4 +46,10 @@ class AppLocalizationsVi extends AppLocalizations {
   String txt_app_version(String number, String buildNumber) {
     return 'Version $number-$buildNumber';
   }
+
+  @override
+  String get txt_about_1 => 'Đỗ Xí Ngầu là một ứng dụng nhẹ và dễ sử dụng để lắc xí ngầu bất cứ lúc nào, ở đâu. Cho dù bạn đang chơi một trò chơi trên bàn hay chỉ cần một số ngẫu nhiên, ứng dụng này sẽ giúp bạn!';
+
+  @override
+  String get txt_about_2 => 'Ứng dụng này miễn phí để sử dụng. Để hỗ trợ nhà phát triển và tiếp tục cải thiện ứng dụng, một quảng cáo nhỏ sẽ được hiển thị. Cảm ơn bạn đã ủng hộ!';
 }
