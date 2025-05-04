@@ -20,23 +20,39 @@ class _AdsBannerState extends State<AdsBanner> {
   }
 
   void _loadBannerAd() {
-    _bannerAd = BannerAd(
-      adUnitId: AdsHelper.bannerAdUnitId,
-      request: const AdRequest(),
-      size: AdSize.banner,
-      listener: BannerAdListener(
-        onAdLoaded: (ad) {
-          setState(() {
-            _isBannerAdReady = true;
-          });
-        },
-        onAdFailedToLoad: (ad, error) {
-          ad.dispose();
-          debugPrint('BannerAd failed to load: $error');
+    try {
+      _bannerAd = BannerAd(
+        adUnitId: AdsHelper.bannerAdUnitId,
+        request: const AdRequest(),
+        size: AdSize.banner,
+        listener: BannerAdListener(
+          onAdLoaded: (ad) {
+            debugPrint('BannerAd ${ad.adUnitId} loaded:  ${ad.hashCode}');
+            if (mounted) {
+              setState(() {
+                _isBannerAdReady = true;
+              });
+            }
+          },
+          onAdFailedToLoad: (ad, error) {
+            ad.dispose();
+            debugPrint('BannerAd ${ad.adUnitId} failed to load: $error');
+            if (mounted) {
+              setState(() {
+                _isBannerAdReady = false;
+              });
+            }
+          },
+        ),
+      )..load();
+    } catch (e) {
+      debugPrint("Error loading banner ad: $e");
+      if (mounted) {
+        setState(() {
           _isBannerAdReady = false;
-        },
-      ),
-    )..load();
+        });
+      }
+    }
   }
 
   @override
