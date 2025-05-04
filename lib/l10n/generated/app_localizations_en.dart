@@ -53,5 +53,8 @@ class AppLocalizationsEn extends AppLocalizations {
   String get txt_about_1 => 'Roll Dice is a lightweight and easy-to-use app for rolling dice anytime, anywhere. Whether you\'re playing a board game or just need a random number, this app is here to help!';
 
   @override
-  String get txt_about_2 => 'This app is free to use. To support the developer and keep improving the app, a small banner ad is displayed. Thank you for your support!';
+  String get txt_about_2 => 'This app is free to use. To support the developer and keep improving the app, a small banner ad is displayed.';
+
+  @override
+  String get txt_about_3 => 'Thank you for your support!';
 }

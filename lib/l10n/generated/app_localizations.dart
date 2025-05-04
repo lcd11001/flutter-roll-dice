@@ -170,8 +170,14 @@ abstract class AppLocalizations {
   /// No description provided for @txt_about_2.
   ///
   /// In en, this message translates to:
-  /// **'This app is free to use. To support the developer and keep improving the app, a small banner ad is displayed. Thank you for your support!'**
+  /// **'This app is free to use. To support the developer and keep improving the app, a small banner ad is displayed.'**
   String get txt_about_2;
+
+  /// No description provided for @txt_about_3.
+  ///
+  /// In en, this message translates to:
+  /// **'Thank you for your support!'**
+  String get txt_about_3;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

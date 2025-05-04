@@ -160,6 +160,11 @@ class SettingsPopup extends ConsumerWidget {
           loc.txt_about_2,
           style: GoogleFonts.getFont("Yeseva One").copyWith(fontSize: 16),
         ),
+        const SizedBox(height: 16),
+        Text(
+          loc.txt_about_3,
+          style: GoogleFonts.getFont("Yeseva One").copyWith(fontSize: 16),
+        ),
       ],
     );
   }
