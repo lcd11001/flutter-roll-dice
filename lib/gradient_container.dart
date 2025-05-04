@@ -15,6 +15,7 @@ import 'package:simple_roll_dice/dice_roller_3d.dart';
 import 'package:simple_roll_dice/providers/provider_settings.dart';
 import 'package:simple_roll_dice/result_text.dart';
 import 'package:simple_roll_dice/styled_text.dart';
+import 'package:simple_roll_dice/widgets/ads/ads_banner.dart';
 import 'package:simple_roll_dice/widgets/settings_popup.dart';
 
 class GradientContainer extends ConsumerStatefulWidget {
@@ -121,6 +122,9 @@ class _GradientContainerState extends ConsumerState<GradientContainer>
       return const SizedBox();
     }
 
+    const double bottomSheetHeight = 40.0; // Height from ThemeData in app.dart
+    const double adPadding = 10.0; // Optional extra space above BottomSheet
+
     // watch the settings provider state
     final settings = ref.watch(settingsProvider);
 
@@ -175,7 +179,8 @@ class _GradientContainerState extends ConsumerState<GradientContainer>
                       );
                     },
                   ),
-                  const SizedBox(height: 50),
+                  const AdsBanner(),
+                  SizedBox(height: adPadding),
                 ],
               ),
             ),

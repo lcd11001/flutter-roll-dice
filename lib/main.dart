@@ -5,31 +5,53 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:simple_roll_dice/app.dart';
 import 'package:simple_roll_dice/providers/provider_settings.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
+  MobileAds.instance.initialize().then((InitializationStatus initStatus) {
+    debugPrint("Initialization MobileAds complete:");
+    // You can optionally print the status of each adapter
+    initStatus.adapterStatuses.forEach((key, value) {
+      debugPrint(
+        'Adapter status for $key: '
+        'State=${value.state}, Description=${value.description}',
+      );
+    });
+  });
+  RequestConfiguration requestConfiguration = RequestConfiguration(
+    testDeviceIds: ['f8c943c9-c22d-48b8-87f7-36bd5c0fa16c'],
+  );
+  MobileAds.instance.updateRequestConfiguration(requestConfiguration);
 
   GoogleFonts.config.allowRuntimeFetching = false;
 
   try {
     LicenseRegistry.addLicense(() async* {
-      final licensePacifico =
-          await rootBundle.loadString('assets/google_fonts/Pacifico/OFL.txt');
+      final licensePacifico = await rootBundle.loadString(
+        'assets/google_fonts/Pacifico/OFL.txt',
+      );
       debugPrint("Pacifico: $licensePacifico");
-      yield LicenseEntryWithLineBreaks(
-          ['google_fonts/Pacifico'], licensePacifico);
+      yield LicenseEntryWithLineBreaks([
+        'google_fonts/Pacifico',
+      ], licensePacifico);
 
-      final licenseBlackOpsOne = await rootBundle
-          .loadString('assets/google_fonts/Black_Ops_One/OFL.txt');
+      final licenseBlackOpsOne = await rootBundle.loadString(
+        'assets/google_fonts/Black_Ops_One/OFL.txt',
+      );
       debugPrint("BlackOpsOne: $licenseBlackOpsOne");
-      yield LicenseEntryWithLineBreaks(
-          ['google_fonts/Black_Ops_One'], licenseBlackOpsOne);
+      yield LicenseEntryWithLineBreaks([
+        'google_fonts/Black_Ops_One',
+      ], licenseBlackOpsOne);
 
-      final licenseYesevaOne =
-          await rootBundle.loadString('assets/google_fonts/Yeseva_One/OFL.txt');
+      final licenseYesevaOne = await rootBundle.loadString(
+        'assets/google_fonts/Yeseva_One/OFL.txt',
+      );
       debugPrint("YesevaOne: $licenseYesevaOne");
-      yield LicenseEntryWithLineBreaks(
-          ['google_fonts/Yeseva_One'], licenseYesevaOne);
+      yield LicenseEntryWithLineBreaks([
+        'google_fonts/Yeseva_One',
+      ], licenseYesevaOne);
     });
   } catch (e) {
     debugPrint("Error: $e");
@@ -38,10 +60,5 @@ Future<void> main() async {
   final container = ProviderContainer();
   await container.read(settingsProvider.notifier).loadSettings();
 
-  runApp(
-    UncontrolledProviderScope(
-      container: container,
-      child: const App(),
-    ),
-  );
+  runApp(UncontrolledProviderScope(container: container, child: const App()));
 }
