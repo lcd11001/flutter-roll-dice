@@ -30,6 +30,8 @@
 	<string>Main</string>
 	<key>GADApplicationIdentifier</key>
 	<string>ca-app-pub-7397667053558913~1641768584</string>
+	<key>NSUserTrackingUsageDescription</key>
+	<string>To keep Roll Dice free and enhance your experience with ads that are more relevant to your interests, please allow tracking. This helps us support the app's ongoing development and improvements. Thank you for your support!</string>
 	<key>UISupportedInterfaceOrientations</key>
 	<array>
 		<string>UIInterfaceOrientationPortrait</string>
