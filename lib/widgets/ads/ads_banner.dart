@@ -20,39 +20,38 @@ class _AdsBannerState extends State<AdsBanner> {
   }
 
   void _loadBannerAd() {
-    try {
-      _bannerAd = BannerAd(
-        adUnitId: AdsHelper.bannerAdUnitId,
-        request: const AdRequest(),
-        size: AdSize.banner,
-        listener: BannerAdListener(
-          onAdLoaded: (ad) {
-            debugPrint('BannerAd ${ad.adUnitId} loaded:  ${ad.hashCode}');
-            if (mounted) {
-              setState(() {
-                _isBannerAdReady = true;
-              });
-            }
-          },
-          onAdFailedToLoad: (ad, error) {
-            ad.dispose();
-            debugPrint('BannerAd ${ad.adUnitId} failed to load: $error');
-            if (mounted) {
-              setState(() {
-                _isBannerAdReady = false;
-              });
-            }
-          },
-        ),
-      )..load();
-    } catch (e) {
-      debugPrint("Error loading banner ad: $e");
-      if (mounted) {
-        setState(() {
-          _isBannerAdReady = false;
-        });
-      }
-    }
+    _createBannerAd(AdsHelper.bannerAdUnitId);
+  }
+
+  void _createBannerAd(String adUnitId) {
+    _bannerAd = BannerAd(
+      adUnitId: adUnitId,
+      request: const AdRequest(),
+      size: AdSize.banner,
+      listener: BannerAdListener(
+        onAdLoaded: (ad) {
+          debugPrint('BannerAd ${ad.adUnitId} loaded:  ${ad.hashCode}');
+          if (mounted) {
+            setState(() {
+              _isBannerAdReady = true;
+            });
+          }
+        },
+        onAdFailedToLoad: (ad, error) {
+          ad.dispose();
+          debugPrint('BannerAd ${ad.adUnitId} failed to load: $error');
+          // https://developers.google.com/admob/android/reference/com/google/android/gms/ads/AdRequest#summary
+          if (error.code == 3) {
+            _createBannerAd(AdsHelper.bannerTestId);
+          }
+          if (mounted) {
+            setState(() {
+              _isBannerAdReady = false;
+            });
+          }
+        },
+      ),
+    )..load();
   }
 
   @override
