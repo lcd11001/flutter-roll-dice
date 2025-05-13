@@ -6,9 +6,13 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:simple_roll_dice/app.dart';
 import 'package:simple_roll_dice/providers/provider_settings.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'firebase_options.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
 
   MobileAds.instance.initialize().then((InitializationStatus initStatus) {
     debugPrint("Initialization MobileAds complete:");
