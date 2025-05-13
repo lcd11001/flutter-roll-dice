@@ -150,17 +150,17 @@ class SettingsPopup extends ConsumerWidget {
       applicationLegalese: loc.txt_app_legalese(DateTime.now().year),
       barrierColor: Colors.black.withAlpha(128),
       children: [
-        const SizedBox(height: 16),
+        const SizedBox(height: 14),
         Text(
           loc.txt_about_1,
           style: GoogleFonts.getFont("Yeseva One").copyWith(fontSize: 16),
         ),
-        const SizedBox(height: 16),
+        const SizedBox(height: 14),
         Text(
           loc.txt_about_2,
           style: GoogleFonts.getFont("Yeseva One").copyWith(fontSize: 16),
         ),
-        const SizedBox(height: 16),
+        const SizedBox(height: 14),
         Text(
           loc.txt_about_3,
           style: GoogleFonts.getFont("Yeseva One").copyWith(fontSize: 16),
