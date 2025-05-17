@@ -180,7 +180,7 @@ class _GradientContainerState extends ConsumerState<GradientContainer>
                     },
                   ),
                   const AdsBanner(),
-                  SizedBox(height: adPadding),
+                  SizedBox(height: bottomSheetHeight + adPadding),
                 ],
               ),
             ),
