@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<locale-config xmlns:android="http://schemas.android.com/apk/res/android">
+   <locale android:name="en"/>
+   <!-- Add other locales your app supports, e.g., <locale android:name="es"/> -->
+   <!-- Make sure you have corresponding string resources for each locale declared -->
+   <locale android:name="vi"/>
+</locale-config>
