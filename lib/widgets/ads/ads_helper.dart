@@ -12,9 +12,4 @@ class AdsHelper {
       );
     }
   }
-
-  static String get bannerTestId {
-    // https://developers.google.com/admob/android/banner#always_test_with_test_ads
-    return 'ca-app-pub-3940256099942544/9214589741';
-  }
 }

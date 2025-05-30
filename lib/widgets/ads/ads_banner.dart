@@ -40,10 +40,6 @@ class _AdsBannerState extends State<AdsBanner> {
         onAdFailedToLoad: (ad, error) {
           ad.dispose();
           debugPrint('BannerAd ${ad.adUnitId} failed to load: $error');
-          // https://developers.google.com/admob/android/reference/com/google/android/gms/ads/AdRequest#summary
-          if (error.code == 3) {
-            _createBannerAd(AdsHelper.bannerTestId);
-          }
           if (mounted) {
             setState(() {
               _isBannerAdReady = false;
