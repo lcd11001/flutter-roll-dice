@@ -25,7 +25,7 @@ Future<void> main() async {
     });
   });
   RequestConfiguration requestConfiguration = RequestConfiguration(
-    testDeviceIds: ['f8c943c9-c22d-48b8-87f7-36bd5c0fa16c'],
+    testDeviceIds: ['90403bfa-19da-4bab-b9d2-a0ff5a386c80'],
   );
   MobileAds.instance.updateRequestConfiguration(requestConfiguration);
 

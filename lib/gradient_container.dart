@@ -41,6 +41,7 @@ final randomizer = Random();
 class _GradientContainerState extends ConsumerState<GradientContainer>
     with SingleTickerProviderStateMixin {
   late int _isLoading;
+  bool _isAdBannerReady = false;
 
   int _isRolling = 0;
   int _dicePoints = 0;
@@ -179,8 +180,22 @@ class _GradientContainerState extends ConsumerState<GradientContainer>
                       );
                     },
                   ),
-                  const AdsBanner(),
-                  SizedBox(height: bottomSheetHeight + adPadding),
+                  AdsBanner(
+                    padding: adPadding,
+                    onLoadStatusChanged: (isAdReady) {
+                      if (mounted) {
+                        setState(() {
+                          _isAdBannerReady = isAdReady;
+                        });
+                      }
+                    },
+                  ),
+                  SizedBox(
+                    height:
+                        _isAdBannerReady
+                            ? bottomSheetHeight + adPadding
+                            : bottomSheetHeight * 0.5,
+                  ),
                 ],
               ),
             ),
