@@ -300,7 +300,7 @@ class _GradientContainerState extends ConsumerState<GradientContainer>
     }
   }
 
-  buildOptions() {
+  Widget buildOptions() {
     final settings = ref.read(settingsProvider);
     final settingsNotifier = ref.read(settingsProvider.notifier);
 

@@ -22,7 +22,10 @@ android {
     namespace = "com.lcdsoft.flutter.rolldice"
     compileSdk = flutter.compileSdkVersion
     // ndkVersion = flutter.ndkVersion
-    ndkVersion = "27.0.12077973"
+
+    // support 16KB page sizes
+    // https://youtu.be/MnMGJhuChRI?si=NsxEozmp9BBxeFLw&t=201
+    ndkVersion = "28.2.13676358"
 
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_11
@@ -55,6 +58,11 @@ android {
         targetSdk = flutter.targetSdkVersion
         versionCode = flutter.versionCode
         versionName = flutter.versionName
+
+        ndk {
+            // Specifies the ABI configurations to build for. This will result in a larger APK.
+            abiFilters.addAll(listOf("armeabi-v7a", "arm64-v8a", "x86_64"))
+        }
     }
 
     signingConfigs {
