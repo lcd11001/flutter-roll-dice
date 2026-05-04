@@ -17,6 +17,7 @@ import 'package:simple_roll_dice/result_text.dart';
 import 'package:simple_roll_dice/styled_text.dart';
 import 'package:simple_roll_dice/widgets/ads/ads_banner.dart';
 import 'package:simple_roll_dice/widgets/settings_popup.dart';
+import 'package:simple_roll_dice/widgets/voice_widget.dart';
 
 class RollDiceApp extends ConsumerStatefulWidget {
   const RollDiceApp({super.key});
@@ -41,6 +42,8 @@ class _RollDiceAppState extends ConsumerState<RollDiceApp>
   int _isRolling = 0;
   int _dicePoints = 0;
   bool _showResult = false;
+  bool _isResultAnimationCompleted = false;
+  bool _isVoiceCompleted = false;
   double _diceVerticalPosition = -100.0;
   final List<DiceRoller3DState> _diceRollers = List.empty(growable: true);
 
@@ -174,15 +177,20 @@ class _RollDiceAppState extends ConsumerState<RollDiceApp>
           ),
         ),
         if (_showResult)
-          Container(
-            color: Colors.black.withAlpha(128),
-            child: Center(
-              child: ResultText(
-                number: _dicePoints,
-                milisecondsDuration: settings.allowAudio ? 500 : 1500,
-                onCompleted: _onShowResultCompleted,
+          Stack(
+            children: [
+              Container(
+                color: Colors.black.withAlpha(150),
+                child: Center(
+                  child: ResultText(
+                    number: _dicePoints,
+                    milisecondsDuration: settings.allowAudio ? 500 : 1500,
+                    onCompleted: _onShowResultCompleted,
+                  ),
+                ),
               ),
-            ),
+              VoiceWidget(number: _dicePoints, onCompleted: _onVoiceCompleted),
+            ],
           ),
 
         // show settings popup if needed
@@ -261,11 +269,23 @@ class _RollDiceAppState extends ConsumerState<RollDiceApp>
 
     if (_showResult) {
       _stopSound();
+      _isResultAnimationCompleted = false;
+      _isVoiceCompleted = false;
     }
   }
 
-  void _onShowResultCompleted(PlayerState state) {
-    if (state == PlayerState.completed) {
+  void _onShowResultCompleted() {
+    _isResultAnimationCompleted = true;
+    _checkHideResult();
+  }
+
+  void _onVoiceCompleted(PlayerState state) {
+    _isVoiceCompleted = true;
+    _checkHideResult();
+  }
+
+  void _checkHideResult() {
+    if (_isResultAnimationCompleted && _isVoiceCompleted) {
       setState(() {
         _showResult = false;
       });
