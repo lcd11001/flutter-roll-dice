@@ -45,8 +45,8 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
-  String txt_app_version(String number, String buildNumber) {
-    return 'Version $number-$buildNumber';
+  String txt_app_version(String number) {
+    return 'v$number';
   }
 
   @override

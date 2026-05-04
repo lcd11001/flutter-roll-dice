@@ -28,15 +28,15 @@ class ProviderSettings {
   }
 }
 
-class ProviderSettingsNotifier extends StateNotifier<ProviderSettings> {
-  ProviderSettingsNotifier()
-      : super(
-          ProviderSettings._(
-            numberDices: 3,
-            allowAudio: true,
-            showSettings: false,
-          ),
-        );
+class ProviderSettingsNotifier extends Notifier<ProviderSettings> {
+  @override
+  ProviderSettings build() {
+    return ProviderSettings._(
+      numberDices: 3,
+      allowAudio: true,
+      showSettings: false,
+    );
+  }
 
   void toggleShowSettings() {
     state = state.copyWith(showSettings: !state.showSettings);
@@ -50,10 +50,7 @@ class ProviderSettingsNotifier extends StateNotifier<ProviderSettings> {
 
   void setNumberDices(int numberDices) {
     state = state.copyWith(
-      numberDices: numberDices.clamp(
-        state.minDices,
-        state.maxDices,
-      ),
+      numberDices: numberDices.clamp(state.minDices, state.maxDices),
     );
     _saveSettings();
   }
@@ -77,6 +74,6 @@ class ProviderSettingsNotifier extends StateNotifier<ProviderSettings> {
 }
 
 final settingsProvider =
-    StateNotifierProvider<ProviderSettingsNotifier, ProviderSettings>((ref) {
-  return ProviderSettingsNotifier();
-});
+    NotifierProvider<ProviderSettingsNotifier, ProviderSettings>(() {
+      return ProviderSettingsNotifier();
+    });

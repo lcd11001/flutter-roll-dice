@@ -138,10 +138,7 @@ class SettingsPopup extends ConsumerWidget {
     showAboutDialog(
       context: context,
       applicationName: packageInfo.appName,
-      applicationVersion: loc.txt_app_version(
-        packageInfo.version,
-        packageInfo.buildNumber,
-      ),
+      applicationVersion: loc.txt_app_version(packageInfo.version),
       applicationIcon: Image.asset(
         'assets/icons/icon_1024x1024.png',
         width: 48,

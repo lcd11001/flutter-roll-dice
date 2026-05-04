@@ -37,18 +37,13 @@
             }
         }
     },
-    "txt_app_version": "Version {number}-{buildNumber}",
+    "txt_app_version": "v{number}",
     "@txt_app_version": {
         "placeholders": {
             "number": {
                 "type": "String",
                 "example": "1.0.0",
                 "description": "Version number"
-            },
-            "buildNumber": {
-                "type": "String",
-                "example": "1",
-                "description": "Build number"
             }
         }
     },

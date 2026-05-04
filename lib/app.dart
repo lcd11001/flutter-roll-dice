@@ -36,10 +36,7 @@ class App extends StatelessWidget {
 
     return Container(
       width: double.infinity,
-      margin: const EdgeInsets.only(
-        left: 10,
-        right: 10,
-      ),
+      margin: const EdgeInsets.only(left: 10, right: 10),
       // color: Colors.blue,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -47,11 +44,8 @@ class App extends StatelessWidget {
         children: [
           const SettingsIconButton(),
           Text(
-            loc.txt_app_version(packageInfo.version, packageInfo.buildNumber),
-            style: const TextStyle(
-              fontSize: 15,
-              color: Colors.white,
-            ),
+            loc.txt_app_version(packageInfo.version),
+            style: const TextStyle(fontSize: 15, color: Colors.white),
           ),
         ],
       ),

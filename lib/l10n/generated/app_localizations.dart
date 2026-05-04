@@ -161,8 +161,8 @@ abstract class AppLocalizations {
   /// No description provided for @txt_app_version.
   ///
   /// In en, this message translates to:
-  /// **'Version {number}-{buildNumber}'**
-  String txt_app_version(String number, String buildNumber);
+  /// **'v{number}'**
+  String txt_app_version(String number);
 
   /// No description provided for @txt_about_1.
   ///
