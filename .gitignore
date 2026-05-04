@@ -46,3 +46,4 @@ app.*.map.json
 /android/.kotlin
 android/app/google-services.json
 lib/firebase_options.dart
+logcat.txt
