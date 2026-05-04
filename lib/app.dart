@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 
 import 'package:simple_roll_dice/app_version.dart';
-import 'package:simple_roll_dice/gradient_container.dart';
+import 'package:simple_roll_dice/gradient_background.dart';
+import 'package:simple_roll_dice/roll_dice_app.dart';
 
 import 'package:simple_roll_dice/l10n/generated/app_localizations.dart';
 import 'package:simple_roll_dice/widgets/settings_icon_button.dart';
@@ -23,10 +24,14 @@ class App extends StatelessWidget {
           constraints: BoxConstraints.expand(height: 40),
         ),
       ),
-      home: Scaffold(
-        //body: GradientContainer(colors: [Colors.blue, Colors.green]),
-        body: const GradientContainer.purple(),
-        bottomSheet: AppVersion(builder: builderAppVersion),
+      home: GradientBackground.purple(
+        child: SafeArea(
+          child: Scaffold(
+            backgroundColor: Colors.transparent,
+            body: const RollDiceApp(),
+            bottomSheet: AppVersion(builder: builderAppVersion),
+          ),
+        ),
       ),
     );
   }
