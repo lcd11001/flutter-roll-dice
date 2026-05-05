@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -7,8 +9,16 @@ import 'package:simple_roll_dice/providers/provider_settings.dart';
 class VoiceWidget extends ConsumerStatefulWidget {
   final int number;
   final void Function(PlayerState)? onCompleted;
+  final void Function(Object)? onError;
+  final Duration timeout;
 
-  const VoiceWidget({super.key, required this.number, this.onCompleted});
+  const VoiceWidget({
+    super.key,
+    required this.number,
+    this.onCompleted,
+    this.onError,
+    this.timeout = const Duration(seconds: 1),
+  });
 
   @override
   ConsumerState<VoiceWidget> createState() => _VoiceWidgetState();
@@ -27,6 +37,13 @@ class _VoiceWidgetState extends ConsumerState<VoiceWidget> {
         widget.onCompleted?.call(event);
       }
     });
+    _audioPlayer.eventStream.listen(
+      null,
+      onError: (Object error, StackTrace? stackTrace) {
+        // debugPrint('VoiceWidget player error: $error');
+        widget.onError?.call(error);
+      },
+    );
   }
 
   @override
@@ -49,10 +66,12 @@ class _VoiceWidgetState extends ConsumerState<VoiceWidget> {
 
     try {
       debugPrint('Playing voice sound: $url');
-      await _audioPlayer.play(UrlSource(url), mode: PlayerMode.mediaPlayer);
+      await _audioPlayer
+          .play(UrlSource(url), mode: PlayerMode.mediaPlayer)
+          .timeout(widget.timeout);
     } catch (e) {
       debugPrint('Error playing voice sound: $e');
-      widget.onCompleted?.call(PlayerState.completed);
+      widget.onError?.call(e);
     }
   }
 

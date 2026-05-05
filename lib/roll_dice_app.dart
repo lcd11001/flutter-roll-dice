@@ -209,7 +209,9 @@ class _RollDiceAppState extends ConsumerState<RollDiceApp>
                 ),
                 VoiceWidget(
                   number: _dicePoints,
+                  timeout: Duration(seconds: 2),
                   onCompleted: _onVoiceCompleted,
+                  onError: _onVoiceError,
                 ),
               ],
             ),
@@ -302,6 +304,12 @@ class _RollDiceAppState extends ConsumerState<RollDiceApp>
   }
 
   void _onVoiceCompleted(PlayerState state) {
+    _isVoiceCompleted = true;
+    _checkHideResult();
+  }
+
+  void _onVoiceError(Object error) {
+    debugPrint('Voice error ignored: $error');
     _isVoiceCompleted = true;
     _checkHideResult();
   }
