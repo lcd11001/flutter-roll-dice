@@ -20,7 +20,9 @@ import 'package:simple_roll_dice/widgets/settings_popup.dart';
 import 'package:simple_roll_dice/widgets/voice_widget.dart';
 
 class RollDiceApp extends ConsumerStatefulWidget {
-  const RollDiceApp({super.key});
+  const RollDiceApp({super.key, this.safeAreaPadding = EdgeInsets.zero});
+
+  final EdgeInsets safeAreaPadding;
 
   @override
   ConsumerState<RollDiceApp> createState() => _RollDiceAppState();
@@ -114,10 +116,20 @@ class _RollDiceAppState extends ConsumerState<RollDiceApp>
     const double bottomSheetHeight = 40.0; // Height from ThemeData in app.dart
     const double adPadding = 10.0; // Optional extra space above BottomSheet
 
+    final EdgeInsets safeAreaPadding = widget.safeAreaPadding;
+    final double paddingTop = safeAreaPadding.top;
+    final double paddingBottom = safeAreaPadding.bottom;
+    final double paddingLeft = safeAreaPadding.left;
+    final double paddingRight = safeAreaPadding.right;
+    debugPrint(
+      'Screen padding - top: $paddingTop, bottom: $paddingBottom, left: $paddingLeft, right: $paddingRight',
+    );
+
     // watch the settings provider state
     final settings = ref.watch(settingsProvider);
 
     return Stack(
+      clipBehavior: Clip.none,
       children: [
         Center(
           child: Column(
@@ -177,20 +189,30 @@ class _RollDiceAppState extends ConsumerState<RollDiceApp>
           ),
         ),
         if (_showResult)
-          Stack(
-            children: [
-              Container(
-                color: Colors.black.withAlpha(150),
-                child: Center(
-                  child: ResultText(
-                    number: _dicePoints,
-                    milisecondsDuration: settings.allowAudio ? 500 : 1500,
-                    onCompleted: _onShowResultCompleted,
+          Positioned.fill(
+            // force the overlay to cover the entire screen, including safe areas
+            top: -paddingTop,
+            bottom: -paddingBottom,
+            left: -paddingLeft,
+            right: -paddingRight,
+            child: Stack(
+              children: [
+                Container(
+                  color: Colors.black.withAlpha(150),
+                  child: Center(
+                    child: ResultText(
+                      number: _dicePoints,
+                      milisecondsDuration: settings.allowAudio ? 500 : 1500,
+                      onCompleted: _onShowResultCompleted,
+                    ),
                   ),
                 ),
-              ),
-              VoiceWidget(number: _dicePoints, onCompleted: _onVoiceCompleted),
-            ],
+                VoiceWidget(
+                  number: _dicePoints,
+                  onCompleted: _onVoiceCompleted,
+                ),
+              ],
+            ),
           ),
 
         // show settings popup if needed

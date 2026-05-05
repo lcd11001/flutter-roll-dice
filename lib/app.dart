@@ -25,12 +25,17 @@ class App extends StatelessWidget {
         ),
       ),
       home: GradientBackground.purple(
-        child: SafeArea(
-          child: Scaffold(
-            backgroundColor: Colors.transparent,
-            body: const RollDiceApp(),
-            bottomSheet: AppVersion(builder: builderAppVersion),
-          ),
+        child: Builder(
+          builder: (ctx) {
+            final safeAreaPadding = MediaQuery.of(ctx).viewPadding;
+            return SafeArea(
+              child: Scaffold(
+                backgroundColor: Colors.transparent,
+                body: RollDiceApp(safeAreaPadding: safeAreaPadding),
+                bottomSheet: AppVersion(builder: builderAppVersion),
+              ),
+            );
+          },
         ),
       ),
     );
