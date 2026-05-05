@@ -106,10 +106,10 @@ class _RollDiceAppState extends ConsumerState<RollDiceApp>
     // Adjust the width as needed
     final double screenWidth = MediaQuery.of(context).size.width;
     final double maxDiceWidth = max(0.0, screenWidth / 2 - 16);
-    debugPrint('Max dice width: $maxDiceWidth, screen width: $screenWidth');
+    // debugPrint('Max dice width: $maxDiceWidth, screen width: $screenWidth');
 
     if (screenWidth <= 0) {
-      debugPrint('!!!!!!! invalid screen width: $screenWidth');
+      // debugPrint('!!!!!!! invalid screen width: $screenWidth');
       return const SizedBox();
     }
 
@@ -121,9 +121,9 @@ class _RollDiceAppState extends ConsumerState<RollDiceApp>
     final double paddingBottom = safeAreaPadding.bottom;
     final double paddingLeft = safeAreaPadding.left;
     final double paddingRight = safeAreaPadding.right;
-    debugPrint(
-      'Screen padding - top: $paddingTop, bottom: $paddingBottom, left: $paddingLeft, right: $paddingRight',
-    );
+    // debugPrint(
+    //   'Screen padding - top: $paddingTop, bottom: $paddingBottom, left: $paddingLeft, right: $paddingRight',
+    // );
 
     // watch the settings provider state
     final settings = ref.watch(settingsProvider);
@@ -254,7 +254,7 @@ class _RollDiceAppState extends ConsumerState<RollDiceApp>
 
   void _onRollDice() {
     if (!isReady()) {
-      debugPrint('Not ready');
+      // debugPrint('Not ready');
       return;
     }
     final settings = ref.read(settingsProvider);
@@ -406,7 +406,7 @@ class _RollDiceAppState extends ConsumerState<RollDiceApp>
       if (num == 1) {
         Timer.periodic(const Duration(milliseconds: 50), (timer) {
           if (_diceVerticalPosition > _dropGround) {
-            debugPrint('Play single rolling sound  at $_diceVerticalPosition');
+            // debugPrint('Play single rolling sound  at $_diceVerticalPosition');
             _audioDiceSingleRolling.resume();
             timer.cancel();
           }
@@ -414,7 +414,7 @@ class _RollDiceAppState extends ConsumerState<RollDiceApp>
       } else {
         Timer.periodic(const Duration(milliseconds: 50), (timer) {
           if (_diceVerticalPosition > _dropGround) {
-            debugPrint('Play rolling sound  at $_diceVerticalPosition');
+            // debugPrint('Play rolling sound  at $_diceVerticalPosition');
             _audioDiceRolling.resume();
             timer.cancel();
           }
@@ -422,7 +422,7 @@ class _RollDiceAppState extends ConsumerState<RollDiceApp>
 
         Timer.periodic(const Duration(milliseconds: 120), (timer) {
           if (_diceVerticalPosition > _dropGround) {
-            debugPrint('Play single rolling sound at $_diceVerticalPosition');
+            // debugPrint('Play single rolling sound at $_diceVerticalPosition');
             _audioDiceSingleRolling.resume();
             timer.cancel();
           }

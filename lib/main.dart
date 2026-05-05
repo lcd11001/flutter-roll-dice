@@ -42,7 +42,7 @@ Future<void> main() async {
       final licensePacifico = await rootBundle.loadString(
         'assets/google_fonts/Pacifico/OFL.txt',
       );
-      debugPrint("Pacifico: $licensePacifico");
+      // debugPrint("Pacifico: $licensePacifico");
       yield LicenseEntryWithLineBreaks([
         'google_fonts/Pacifico',
       ], licensePacifico);
@@ -50,7 +50,7 @@ Future<void> main() async {
       final licenseBlackOpsOne = await rootBundle.loadString(
         'assets/google_fonts/Black_Ops_One/OFL.txt',
       );
-      debugPrint("BlackOpsOne: $licenseBlackOpsOne");
+      // debugPrint("BlackOpsOne: $licenseBlackOpsOne");
       yield LicenseEntryWithLineBreaks([
         'google_fonts/Black_Ops_One',
       ], licenseBlackOpsOne);
@@ -58,7 +58,7 @@ Future<void> main() async {
       final licenseYesevaOne = await rootBundle.loadString(
         'assets/google_fonts/Yeseva_One/OFL.txt',
       );
-      debugPrint("YesevaOne: $licenseYesevaOne");
+      // debugPrint("YesevaOne: $licenseYesevaOne");
       yield LicenseEntryWithLineBreaks([
         'google_fonts/Yeseva_One',
       ], licenseYesevaOne);

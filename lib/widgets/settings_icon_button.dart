@@ -12,13 +12,9 @@ class SettingsIconButton extends ConsumerWidget {
     return IconButton(
       padding: EdgeInsets.zero, // Remove default padding
       alignment: Alignment.center,
-      icon: const Icon(
-        Icons.settings,
-        color: Colors.white,
-        size: 40,
-      ),
+      icon: const Icon(Icons.settings, color: Colors.white, size: 40),
       onPressed: () {
-        debugPrint("settings");
+        // debugPrint("settings");
         providerSettingsNotifier.toggleShowSettings();
       },
     );

@@ -74,10 +74,7 @@ class DiceRoller3DState extends State<DiceRoller3D>
       vsync: this,
     );
 
-    _rotationTween = Vector3Tween(
-      begin: Vector3.zero(),
-      end: Vector3.zero(),
-    );
+    _rotationTween = Vector3Tween(begin: Vector3.zero(), end: Vector3.zero());
 
     _curvedAnimation = CurvedAnimation(
       parent: _controller,
@@ -94,7 +91,7 @@ class DiceRoller3DState extends State<DiceRoller3D>
     _currentRotation = Vector3.array(faceRotations[_targetFace]!);
     _rotation = Vector3.copy(_currentRotation);
 
-    debugPrint('Initial face: $_targetFace');
+    // debugPrint('Initial face: $_targetFace');
   }
 
   @override
@@ -172,7 +169,7 @@ class DiceRoller3DState extends State<DiceRoller3D>
     while (_targetFace == _prevFace) {
       _targetFace = 1 + randomizer.nextInt(6);
     }
-    debugPrint('>>>>>>> Rolling dice from $_prevFace to $_targetFace');
+    // debugPrint('>>>>>>> Rolling dice from $_prevFace to $_targetFace');
 
     _rollCount = 0;
     _performSingleRoll();
@@ -191,7 +188,7 @@ class DiceRoller3DState extends State<DiceRoller3D>
       }
     }
 
-    debugPrint('  #$_rollCount: Rolling dice from $_prevFace to $_currentFace');
+    // debugPrint('  #$_rollCount: Rolling dice from $_prevFace to $_currentFace');
 
     Vector3 targetRotation = Vector3.array(faceRotations[_currentFace]!);
     Vector3 rotationDelta = targetRotation - _currentRotation;
@@ -226,7 +223,7 @@ class DiceRoller3DState extends State<DiceRoller3D>
 
 class Vector3Tween extends Tween<Vector3> {
   Vector3Tween({required Vector3 begin, required Vector3 end})
-      : super(begin: begin, end: end);
+    : super(begin: begin, end: end);
 
   @override
   Vector3 lerp(double t) {
